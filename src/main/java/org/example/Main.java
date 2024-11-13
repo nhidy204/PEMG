@@ -1,40 +1,39 @@
 package org.example;
 
 import Controllers.UserController;
-import Services.Interfaces.IUserService;
-import Services.Interfaces.IValidateService;
-import Services.UserService;
 import Services.ValidateService;
 
 public class Main {
     public static void main(String[] args) {
         UserController userController = new UserController();
-
         ValidateService validateService = ValidateService.getInstance();
+
         while (true) {
-
+            System.out.println("Welcome to the Personal Expense Management System!");
             System.out.println("1. Register");
-            System.out.println("2. Display tasks");
-            System.out.println("3. Delete task");
-            System.out.println("4. Quit");
-            int option = validateService.inputInt("Your choice: ", 1, 4);
-                switch (option) {
-                    case 1:
-                        userController.register();
-                        break;
-                    case 2:
+            System.out.println("2. Login");
+            System.out.println("3. Quit");
 
-                        break;
-                    case 3:
-                        break;
-                    case 4:
-                        System.exit(0);
-                }
+            int option = validateService.inputInt("Your choice: ", 1, 3);
+
+            switch (option) {
+                case 1:
+                    userController.register();
+                    break;
+                case 2:
+                    if (userController.login()) {  // Adjust login method if necessary
+                        System.out.println("You are now logged in!");
+                    }
+                    break;
+                case 3:
+                    System.out.println("Exiting the program...");
+                    System.exit(0);
             }
-            //handing option
-
         }
-        // Create a new user
+    }
+}
+
+// Create a new user
 //        User user = new User("JohnDoe", "password123");
 //
 //        // Add transactions
@@ -59,5 +58,5 @@ public class Main {
 //        if (loadedUser != null) {
 //            System.out.println("User " + loadedUser.getUserName() + " loaded successfully.");
 //        }
-    }
+
 

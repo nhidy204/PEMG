@@ -1,42 +1,37 @@
 package Models;
-import com.google.gson.Gson;
+// import com.google.gson.Gson;
 
-import java.io.FileWriter;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class User {
-    public String userName;
-    public String password;
-    public List<Transaction> transactions = new ArrayList<>();
-    public Budget budget;
-    public List<FinancialGoal> goals = new ArrayList<>();
+    private final String username;
+    private final String password;
+    private final double balance;
 
-    // Constructor, getters, and setters
-    public User(String userName, String password) {
-        this.userName = userName;
+    public User(String username, String password) {
+        this.username = username;
         this.password = password;
-        this.budget = new Budget();
+        this.balance = 0; // Default balance
     }
 
-    public String getUserName() {
-        return userName;
+    // Getters and setters
+    public String getUsername() {
+        return username;
     }
 
-    public boolean loginUser(String password) {
-        return this.password.equals(password);
+    public String getPassword() {
+        return password;
     }
 
-    public void addTransaction(Transaction transaction) {
-        transactions.add(transaction);
+    public double getBalance() {
+        return balance;
     }
 
-    public List<Transaction> getTransactions() {
-        return transactions;
+    public void loginUser(String username, String password) {
+        // Additional logic for logged-in user can be added here
     }
+}
 
+/*
     // Save user data to JSON
     public void saveUserData() {
         try (FileWriter writer = new FileWriter(userName + ".json")) {
@@ -58,4 +53,4 @@ public class User {
         }
     }
 }
-
+*/

@@ -1,12 +1,16 @@
 package Services;
 
-
+import Models.User;
 import Services.Interfaces.IUserService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserService implements IUserService {
     private static UserService instance;
-    private UserService() {
-    }
+    private final List<User> users = new ArrayList<>();
+
+    private UserService() {}
 
     public static UserService getInstance() {
         if (instance == null) {
@@ -17,14 +21,19 @@ public class UserService implements IUserService {
 
     @Override
     public void registerUser(String username, String password) {
-        System.out.println(username);
-        System.out.println(password);
-        System.out.println("registerUser Success");
+        User newUser = new User(username, password); // Assuming initial balance is 0
+        users.add(newUser);
+        System.out.println("User registered successfully!");
     }
 
     @Override
-    public void loginUser(String username, String password) {
-
+    public User loginUser(String username, String password) {
+        for (User user : users) {
+            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
+                return user; // Return the matched user
+            }
+        }
+        return null; // Return null if no matching user is found
     }
 
     @Override
@@ -33,7 +42,5 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void viewReports() {
-
-    }
+    public void viewReports() {}
 }
