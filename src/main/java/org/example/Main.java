@@ -21,7 +21,7 @@ public class Main {
                     userController.register();
                     break;
                 case 2:
-                    if (userController.login()) {  // Adjust login method if necessary
+                    if (userController.login()) {  // Adjusted to directly call the login method
                         System.out.println("You are now logged in!");
                     }
                     break;
@@ -32,6 +32,7 @@ public class Main {
         }
     }
 }
+
 
 // Create a new user
 //        User user = new User("JohnDoe", "password123");

@@ -8,8 +8,8 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class ValidateService implements IValidateService {
-    private static ValidateService instance;
-    private ValidateService() {
+    public static ValidateService instance;
+    public ValidateService() {
     }
 
     public static ValidateService getInstance() {
@@ -19,7 +19,7 @@ public class ValidateService implements IValidateService {
         return instance;
     }
 
-    private Scanner sc = new Scanner(System.in);
+    public Scanner sc = new Scanner(System.in);
 
     public int inputInt(String mess, int min, int max) {
         System.out.print(mess);
@@ -46,10 +46,6 @@ public class ValidateService implements IValidateService {
             String input = sc.nextLine();
             try {
                 double number = Double.parseDouble(input);
-                if(number%0.5!=0){
-                    System.out.println("Please input .5 or integer number");
-                    continue;
-                }
                 if (number < min || number > max) {
                     System.out.print("Please input between " + min + ", " + max + ": ");
                     continue;

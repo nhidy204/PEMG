@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserService implements IUserService {
-    private static UserService instance;
-    private final List<User> users = new ArrayList<>();
+    public static UserService instance;
+    public final List<User> users = new ArrayList<>();
 
-    private UserService() {}
+    public UserService() {}
 
     public static UserService getInstance() {
         if (instance == null) {
