@@ -1,22 +1,20 @@
 package Models;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class ExpenseTarget {
-    public int expenseTargetId;
+    public final UUID id;
     public String name;
     public LocalDateTime createdAt;
     public LocalDateTime updatedAt;
-    public ExpenseTarget(int expenseTargetId, String name) {
-        this.expenseTargetId = expenseTargetId;
+    public ExpenseTarget(int expenseTargetId, UUID id, String name) {
+        this.id = id;
         this.name = name;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
-    public int getExpenseTargetId() {
-        return expenseTargetId;
-    }
-    public void setExpenseTargetId(int expenseTargetId) {
-        this.expenseTargetId = expenseTargetId;
+    public UUID getId() {
+        return id;
     }
     public String getName() {
         return name;

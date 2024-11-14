@@ -1,27 +1,25 @@
 package Models;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class FinancialGoal {
-    public int financialGoalID;
+    public final UUID id;
     public int userId;
     public String name;
     public double targetAmount;
     public LocalDateTime createdAt;
     public LocalDateTime updatedAt;
 
-    public FinancialGoal(int financialGoalID, int userId, String name, double targetAmount) {
-        this.financialGoalID = financialGoalID;
+    public FinancialGoal(int financialGoalID, UUID id, int userId, String name, double targetAmount) {
+        this.id = id;
         this.userId = userId;
         this.name = name;
         this.targetAmount = targetAmount;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
-    public int getFinancialGoalID() {
-        return financialGoalID;
-    }
-    public void setFinancialGoalID(int financialGoalID) {
-        this.financialGoalID = financialGoalID;
+    public UUID getId() {
+        return id;
     }
     public int getUserId() {
         return userId;

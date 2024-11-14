@@ -1,42 +1,45 @@
 package Models;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class User {
-    public int userId;
+    public final UUID id;
     public String email;
     public String password;
     public String name;
     public final LocalDateTime createdAt;
     public LocalDateTime updatedAt;
 
-    public User(int userId, String email, String name, String password) {
-        this.userId = userId;
+    public User(UUID id, String email, String name, String password) {
+        this.id = id;
         this.email = email;
         this.password = password;
         this.name = name;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
-
-    public int getUserId() {
-        return userId;
+    public UUID getId() {
+        return id;
     }
-
     public String getEmail() {
         return email;
     }
-
     public String getPassword() {
         return password;
     }
-
     public String getName() {
         return name;
+    }
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
     @Override
     public String toString() {
-        return "User ID: " + userId + "\nEmail: " + email + "\nName: " + name;
+        return "User ID: " + id + "\nEmail: " + email + "\nName: " + name;
     }
 }

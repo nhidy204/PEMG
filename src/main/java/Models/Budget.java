@@ -1,8 +1,9 @@
 package Models;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class Budget {
-    public int budgetId;
+    public final UUID id;
     public int userId;
     public int expenseTargetId;
     public double maximumAmount;
@@ -10,8 +11,8 @@ public class Budget {
     public LocalDateTime createdAt;
     public LocalDateTime updatedAt;
 
-    public Budget (int budgetId, int userId, int expenseTargetId, double maximumAmount, String budgetName) {
-        this.budgetId = budgetId;
+    public Budget (int budgetId, UUID id, int userId, int expenseTargetId, double maximumAmount, String budgetName) {
+        this.id = id;
         this.userId = userId;
         this.expenseTargetId = expenseTargetId;
         this.maximumAmount = maximumAmount;
@@ -19,11 +20,8 @@ public class Budget {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
-    public int getBudgetId() {
-        return budgetId;
-    }
-    public void setBudgetId(int budgetId) {
-        this.budgetId = budgetId;
+    public UUID getId() {
+        return id;
     }
     public int getUserId() {
         return userId;
