@@ -3,7 +3,7 @@ package Models;
 import java.time.LocalDateTime;
 
 public class User {
-    public String userId;
+    public int userId;
     public String email;
     public String password;
     public String name;
@@ -19,7 +19,7 @@ public class User {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
 

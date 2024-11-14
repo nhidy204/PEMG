@@ -1,4 +1,5 @@
 package Models;
+import java.time.LocalDateTime;
 
 public class Transaction {
     public int transactionId;
@@ -6,6 +7,8 @@ public class Transaction {
     public double amount;
     public String type;
     public Integer targetId;
+    public LocalDateTime createdAt;
+    public LocalDateTime updatedAt;
 
     public Transaction(int transactionId, int userId, double amount, String type, Integer targetId) {
         this.transactionId = transactionId;
@@ -13,6 +16,8 @@ public class Transaction {
         this.amount = amount;
         this.type = type;
         this.targetId = targetId;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
     public int getTransactionId() {
         return transactionId;
@@ -43,6 +48,18 @@ public class Transaction {
     }
     public void setTargetId(Integer targetId) {
         this.targetId = targetId;
+    }
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
 
