@@ -1,79 +1,41 @@
 package Models;
 
-import java.time.LocalDateTime;
-
 public class FinancialGoal {
-    public String goalName;
+    public int financialGoalID;
+    public int userId;
+    public String name;
     public double targetAmount;
-    public double currentAmount;
-    public final LocalDateTime createdAt;
-    public LocalDateTime updatedAt;
 
-    public FinancialGoal(String goalName, double targetAmount) {
-        this.goalName = goalName;
+    public FinancialGoal(int financialGoalID, int userId, String name, double targetAmount) {
+        this.financialGoalID = financialGoalID;
+        this.userId = userId;
+        this.name = name;
         this.targetAmount = targetAmount;
-        this.currentAmount = 0;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
     }
-
-    public void addContribution(double amount) {
-        if (amount > 0) {
-            currentAmount += amount;
-            //time
-            this.updatedAt = LocalDateTime.now();
-        } else {
-            System.out.println("Contribution amount must be positive.");
-        }
+    public int getFinancialGoalID() {
+        return financialGoalID;
     }
-
-    public boolean isGoalReached() {
-        return currentAmount >= targetAmount;
+    public void setFinancialGoalID(int financialGoalID) {
+        this.financialGoalID = financialGoalID;
     }
-
-    //get set
-    public String getGoalName() {
-        return goalName;
+    public int getUserId() {
+        return userId;
     }
-
-    public void setGoalName(String goalName) {
-        this.goalName = goalName;
-        //time
-        this.updatedAt = LocalDateTime.now();
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
-
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
     public double getTargetAmount() {
         return targetAmount;
     }
-
     public void setTargetAmount(double targetAmount) {
         this.targetAmount = targetAmount;
-        //time
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    public double getCurrentAmount() {
-        return currentAmount;
-    }
-
-    public void setCurrentAmount(double currentAmount) {
-        this.currentAmount = currentAmount;
-        //time
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    public double getProgress() {
-        if (targetAmount == 0) {
-            return 0;
-        }
-        return (currentAmount / targetAmount) * 100;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
     }
 }
+
+

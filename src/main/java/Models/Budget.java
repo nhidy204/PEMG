@@ -1,84 +1,49 @@
 package Models;
 
-import java.time.LocalDateTime;
-
 public class Budget {
-    public final String[] categories;
-    public final double[] categoryBudgets;
-    public final double[] categorySpending;
-    public final LocalDateTime createdAt;
-    public LocalDateTime updatedAt;
+    public int budgetId;
+    public int userId;
+    public int expenseTargetId;
+    public double maximumAmount;
+    public String budgetName;
 
-    public Budget(String[] categories) {
-        this.categories = categories;
-        this.categoryBudgets = new double[categories.length];
-        this.categorySpending = new double[categories.length];
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+    public Budget (int budgetId, int userId, int expenseTargetId, double maximumAmount, String budgetName) {
+        this.budgetId = budgetId;
+        this.userId = userId;
+        this.expenseTargetId = expenseTargetId;
+        this.maximumAmount = maximumAmount;
+        this.budgetName = budgetName;
     }
-
-    public void setBudget(String category, double amount) {
-        int index = getCategoryIndex(category);
-        if (index != -1) {
-            categoryBudgets[index] = amount;
-            this.updatedAt = LocalDateTime.now(); // Update the timestamp
-            System.out.println("Budget set for " + category + ": $" + amount);
-        } else {
-            System.out.println("Category not found.");
-        }
+    public int getBudgetId() {
+        return budgetId;
     }
-
-    public void addSpending(String category, double amount) {
-        int index = getCategoryIndex(category);
-        if (index != -1) {
-            categorySpending[index] += amount;
-            this.updatedAt = LocalDateTime.now(); // Update the timestamp
-            System.out.println("Added $" + amount + " spending in category " + category);
-        } else {
-            System.out.println("Category not found.");
-        }
+    public void setBudgetId(int budgetId) {
+        this.budgetId = budgetId;
     }
-
-    public boolean isOverBudget(String category) {
-        int index = getCategoryIndex(category);
-        if (index != -1) {
-            return categorySpending[index] > categoryBudgets[index];
-        } else {
-            System.out.println("Category not found.");
-            return false;
-        }
+    public int getUserId() {
+        return userId;
     }
-
-    public double getRemainingBudget(String category) {
-        int index = getCategoryIndex(category);
-        if (index != -1) {
-            return categoryBudgets[index] - categorySpending[index];
-        } else {
-            System.out.println("Category not found.");
-            return 0;
-        }
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
-
-    private int getCategoryIndex(String category) {
-        for (int i = 0; i < categories.length; i++) {
-            if (categories[i].equalsIgnoreCase(category)) {
-                return i;
-            }
-        }
-        return -1;
+    public int getExpenseTargetId() {
+        return expenseTargetId;
     }
-
-    public void printBudgets() {
-        for (int i = 0; i < categories.length; i++) {
-            System.out.println(categories[i] + " Budget: $" + categoryBudgets[i] + ", Spending: $" + categorySpending[i]);
-        }
+    public void setExpenseTargetId(int expenseTargetId) {
+        this.expenseTargetId = expenseTargetId;
     }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public double getMaximumAmount() {
+        return maximumAmount;
     }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
+    public void setMaximumAmount(double maximumAmount) {
+        this.maximumAmount = maximumAmount;
+    }
+    public String getBudgetName() {
+        return budgetName;
+    }
+    public void setBudgetName(String budgetName) {
+        this.budgetName = budgetName;
     }
 }
+
+

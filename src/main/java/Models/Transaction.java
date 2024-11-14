@@ -1,62 +1,48 @@
 package Models;
 
-import java.time.LocalDateTime;
-
 public class Transaction {
-    public String type;
+    public int transactionId;
+    public int userId;
     public double amount;
-    public String category;
-    public final LocalDateTime createdAt;
-    public LocalDateTime updatedAt;
+    public String type;
+    public Integer targetId;
 
-    public Transaction(String type, double amount, String category) {
-        this.type = type;
+    public Transaction(int transactionId, int userId, double amount, String type, Integer targetId) {
+        this.transactionId = transactionId;
+        this.userId = userId;
         this.amount = amount;
-        this.category = category;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
         this.type = type;
-        //time
-        this.updatedAt = LocalDateTime.now();
+        this.targetId = targetId;
     }
-
+    public int getTransactionId() {
+        return transactionId;
+    }
+    public void setTransactionId(int transactionId) {
+        this.transactionId = transactionId;
+    }
+    public int getUserId() {
+        return userId;
+    }
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
     public double getAmount() {
         return amount;
     }
-
     public void setAmount(double amount) {
         this.amount = amount;
-        //time
-        this.updatedAt = LocalDateTime.now();
     }
-
-    public String getCategory() {
-        return category;
+    public String getType() {
+        return type;
     }
-
-    public void setCategory(String category) {
-        this.category = category;
-        //time
-        this.updatedAt = LocalDateTime.now();
+    public void setType(String type) {
+        this.type = type;
     }
-
-    @Override
-    public String toString() {
-        return "Transaction{" + "type='" + type + '\'' + ", amount=" + amount + ", category='" + category + '\'' + '}';
+    public Integer getTargetId() {
+        return targetId;
     }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
+    public void setTargetId(Integer targetId) {
+        this.targetId = targetId;
     }
 }
+
