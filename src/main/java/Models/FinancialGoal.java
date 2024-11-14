@@ -3,15 +3,18 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class FinancialGoal {
-    public final UUID id;
-    public int userId;
+    public UUID id;
+    public UUID userId;
     public String name;
     public double targetAmount;
     public LocalDateTime createdAt;
     public LocalDateTime updatedAt;
 
-    public FinancialGoal(int financialGoalID, UUID id, int userId, String name, double targetAmount) {
-        this.id = id;
+    public FinancialGoal() {
+    }
+
+    public FinancialGoal(int financialGoalID, UUID id, UUID userId, String name, double targetAmount) {
+        this.id = UUID.randomUUID();
         this.userId = userId;
         this.name = name;
         this.targetAmount = targetAmount;
@@ -21,10 +24,10 @@ public class FinancialGoal {
     public UUID getId() {
         return id;
     }
-    public int getUserId() {
+    public UUID getUserId() {
         return userId;
     }
-    public void setUserId(int userId) {
+    public void setUserId(UUID userId) {
         this.userId = userId;
     }
     public String getName() {

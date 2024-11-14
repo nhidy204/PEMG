@@ -4,15 +4,18 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class User {
-    public final UUID id;
+    public UUID id;
     public String email;
     public String password;
     public String name;
-    public final LocalDateTime createdAt;
+    public  LocalDateTime createdAt;
     public LocalDateTime updatedAt;
 
+    public User() {
+    }
+
     public User(UUID id, String email, String name, String password) {
-        this.id = id;
+        this.id = UUID.randomUUID();
         this.email = email;
         this.password = password;
         this.name = name;

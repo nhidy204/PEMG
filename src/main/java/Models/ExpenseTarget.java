@@ -3,12 +3,16 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class ExpenseTarget {
-    public final UUID id;
+    public UUID id;
     public String name;
     public LocalDateTime createdAt;
     public LocalDateTime updatedAt;
+
+    public ExpenseTarget() {
+    }
+
     public ExpenseTarget(int expenseTargetId, UUID id, String name) {
-        this.id = id;
+        this.id = UUID.randomUUID();
         this.name = name;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();

@@ -3,16 +3,19 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Budget {
-    public final UUID id;
-    public int userId;
+    public UUID id;
+    public UUID userId;
     public int expenseTargetId;
     public double maximumAmount;
     public String budgetName;
     public LocalDateTime createdAt;
     public LocalDateTime updatedAt;
 
-    public Budget (int budgetId, UUID id, int userId, int expenseTargetId, double maximumAmount, String budgetName) {
-        this.id = id;
+    public Budget() {
+    }
+
+    public Budget (int budgetId, UUID id, UUID userId, int expenseTargetId, double maximumAmount, String budgetName) {
+        this.id = UUID.randomUUID();
         this.userId = userId;
         this.expenseTargetId = expenseTargetId;
         this.maximumAmount = maximumAmount;
@@ -23,10 +26,10 @@ public class Budget {
     public UUID getId() {
         return id;
     }
-    public int getUserId() {
+    public UUID getUserId() {
         return userId;
     }
-    public void setUserId(int userId) {
+    public void setUserId(UUID userId) {
         this.userId = userId;
     }
     public int getExpenseTargetId() {

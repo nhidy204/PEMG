@@ -3,16 +3,19 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Transaction {
-    public int transactionId;
-    public int userId;
+    public UUID id;
+    public UUID userId;
     public double amount;
     public String type;
     public Integer targetId;
     public LocalDateTime createdAt;
     public LocalDateTime updatedAt;
 
-    public Transaction(int transactionId, int userId, double amount, String type, Integer targetId) {
-        this.transactionId = transactionId;
+    public Transaction() {
+    }
+
+    public Transaction(int transactionId, UUID id, UUID userId, double amount, String type, Integer targetId) {
+        this.id = UUID.randomUUID();
         this.userId = userId;
         this.amount = amount;
         this.type = type;
@@ -20,16 +23,13 @@ public class Transaction {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
-    public int getTransactionId() {
-        return transactionId;
+    public UUID getId() {
+        return id;
     }
-    public void setTransactionId(int transactionId) {
-        this.transactionId = transactionId;
-    }
-    public int getUserId() {
+    public UUID getUserId() {
         return userId;
     }
-    public void setUserId(int userId) {
+    public void setUserId(UUID userId) {
         this.userId = userId;
     }
     public double getAmount() {
