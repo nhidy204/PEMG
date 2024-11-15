@@ -4,10 +4,6 @@ import Constants.FileConstants;
 import Models.User;
 import Services.FileService;
 import Services.Interfaces.IFileService;
-import Services.Interfaces.IUserService;
-import Services.Interfaces.IValidateService;
-import Services.UserService;
-import Services.ValidateService;
 import java.util.Scanner;
 
 public class FileController {
@@ -28,8 +24,8 @@ public class FileController {
             System.out.println("File Created: " + FileConstants.USER_FILE_NAME);
         } else {
             System.out.println("File Already Exists");
-            return;
         }
+        return;
     }
 
     void writeToFile(String content) {
@@ -40,6 +36,6 @@ public class FileController {
     void readFileContent() {
         // Đọc và hiển thị nd
         String content = fileService.readFile(FileConstants.USER_FILE_NAME);
-        System.out.println("Nội dung file: " + content);
+        System.out.println("File content: " + content);
     }
 }

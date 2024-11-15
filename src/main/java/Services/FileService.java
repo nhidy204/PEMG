@@ -20,32 +20,36 @@ public class FileService implements IFileService {
     public void createFile(String fileName) {
         //tạo file ms, khi file chưa ton tia
         try {
-            File file = new File(fileName);
+            String rootPath = System.getProperty("user.dir");
+            File file = new File(rootPath, fileName);
             if (file.createNewFile()){
-                System.out.println("File Created" + fileName);
+                System.out.println("File Created" + file.getAbsolutePath());
             }
             else {
-                System.out.println("File Existed" + fileName);
+                System.out.println("File Existed" + file.getAbsolutePath());
             }
         }
         catch (IOException e) {
             System.out.println("Error creating file");
             e.printStackTrace();
+
         }
 
     }
 
     @Override
     public boolean checkFile(String fileName) {
-        File file = new File(fileName);
-        return false;
+        String rootPath = System.getProperty("user.dir");
+        File file = new File(rootPath, fileName);
+        return file.exists();
     }
 
     @Override
     public String readFile(String fileName) {
         //doc noi dung cua file
         try {
-            return new String(Files.readAllBytes(Paths.get(fileName)));
+            String rootPath = System.getProperty("user.dir");
+            return new String(Files.readAllBytes(Paths.get(rootPath, fileName)));
         }
         catch(IOException e)
         {
@@ -56,9 +60,12 @@ public class FileService implements IFileService {
     }
     public void writeFile(String fileName, String content) {
         //ghi nd vao file
-        try (FileWriter writer = new FileWriter(fileName))
+        try
         {
+            String rootPath = System.getProperty("user.dir");
+            FileWriter writer = new FileWriter(new File(rootPath,fileName));
             writer.write(content);
+            writer.close();
             System.out.println("File Written" + fileName);
         }
         catch (IOException e) {
