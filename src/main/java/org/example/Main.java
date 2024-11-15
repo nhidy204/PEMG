@@ -7,7 +7,6 @@ public class Main {
     public static void main(String[] args) {
         UserController userController = new UserController();
         ValidateService validateService = ValidateService.getInstance();
-
         while (true) {
             System.out.println("Welcome to the Personal Expense Management System!");
             System.out.println("1. Register");

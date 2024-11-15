@@ -12,11 +12,9 @@ import java.util.List;
 
 public class UserService implements IUserService {
     public static UserService instance;
-    public final List<User> users = new ArrayList<>();
-    private final String FILE_PATH = "users.json"; // File to store the users' data
+    public  List<User> users = new ArrayList<>();
 
     public UserService() {
-        loadUsers();
     }
 
     public static UserService getInstance() {
@@ -30,16 +28,19 @@ public class UserService implements IUserService {
     public void registerUser(String username, String password) {
         User newUser = new User();
         users.add(newUser);
+
+        // thuc hien add user vao list roi return user do ra, ben controller lay user trả ra đó save vào file .
+
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting() //de doc hon
                 .create();
-        try (FileWriter writer = new FileWriter(FILE_PATH)) {
-            gson.toJson(users, writer);
-        } catch (IOException e) {
-            System.out.println("Error writing to file: " + e.getMessage());
-        }
-
-        System.out.println("User registered successfully!");
+//        try (FileWriter writer = new FileWriter(FILE_PATH)) {
+//            gson.toJson(users, writer);
+//        } catch (IOException e) {
+//            System.out.println("Error writing to file: " + e.getMessage());
+//        }
+//
+//        System.out.println("User registered successfully!");
     }
 
     @Override
@@ -63,17 +64,24 @@ public class UserService implements IUserService {
     public void viewReports() {}
 
     //load user tu file
-    public void loadUsers() {
-        File file = new File(FILE_PATH);
-        if (file.exists()) {
-            try (FileReader reader = new FileReader(file)) {
-                Gson gson = new Gson();
-                Type listType = new TypeToken<List<User>>() {}.getType();
-                List<User> loadedUsers = gson.fromJson(reader, listType);
-                users.addAll(loadedUsers); // Load users into the list
-            } catch (IOException e) {
-                System.out.println("Error reading from file: " + e.getMessage());
-            }
-        }
+    public void loadUsers( List<User> loadedUsers) {
+
+        //Cai nay chi can truyen vao noi dung file doc duoc
+        // roi set cho users o tren thoi,
+
+
+        users = loadedUsers;
+
+//        File file = new File(FILE_PATH);
+//        if (file.exists()) {
+//            try (FileReader reader = new FileReader(file)) {
+//                Gson gson = new Gson();
+//                Type listType = new TypeToken<List<User>>() {}.getType();
+//                List<User> loadedUsers = gson.fromJson(reader, listType);
+//                users.addAll(loadedUsers); // Load users into the list
+//            } catch (IOException e) {
+//                System.out.println("Error reading from file: " + e.getMessage());
+//            }
+//        }
     }
 }

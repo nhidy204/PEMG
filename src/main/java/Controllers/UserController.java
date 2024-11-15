@@ -114,7 +114,7 @@ public class UserController {
 
         // Use loggedInUser to add the transaction
         if (loggedInUser != null) {
-            loggedInUser.addTransaction(type, amount, category);
+          //  loggedInUser.addTransaction(type, amount, category);
             System.out.println("Transaction added!");
         } else {
             System.out.println("No user is currently logged in.");
@@ -125,7 +125,7 @@ public class UserController {
         System.out.println("Listing all transactions:");
         // Example of listing transactions; implementation may vary based on User class
         if (loggedInUser != null) {
-            loggedInUser.listTransactions();  // Assume this method is in the User class
+           // loggedInUser.listTransactions();  // Assume this method is in the User class
         } else {
             System.out.println("No user is currently logged in.");
         }
