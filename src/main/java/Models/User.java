@@ -9,7 +9,7 @@ public class User {
     public String name;
     public String createdAt;
     public String updatedAt;
-    private Object username;
+    public String username;
 
     public User() {
     }
@@ -46,7 +46,7 @@ public class User {
         return username;
     }
 
-    public void setUsername(Object username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 }
