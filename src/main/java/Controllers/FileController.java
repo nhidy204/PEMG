@@ -17,7 +17,7 @@ public class FileController {
         this.fileService = FileService.getInstance();
     }
 
-    void createUserFile(){
+    public void createUserFile(){
         //truoc khi tao thi dùng ham check, tra ve false thi moi tao, ko thi return
         if (!fileService.checkFile(FileConstants.USER_FILE_NAME)) {
             fileService.createFile(FileConstants.USER_FILE_NAME);

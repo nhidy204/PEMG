@@ -7,4 +7,5 @@ public interface IUserService {
     User loginUser(String username, String password);
     double getUserBalance();
     void viewReports();
+    boolean isUsernameTaken(String username);
 }

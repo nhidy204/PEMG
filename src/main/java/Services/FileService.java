@@ -9,7 +9,11 @@ import java.nio.file.Paths;
 
 public class FileService implements IFileService {
     public static FileService instance;
-    public FileService() {}
+    public String rootPath;
+
+    public FileService() {
+        this.rootPath = System.getProperty("user.dir");
+    }
     public static FileService getInstance() {
         if (instance == null) {
             instance = new FileService();
@@ -18,37 +22,36 @@ public class FileService implements IFileService {
     }
     @Override
     public void createFile(String fileName) {
-        //tạo file ms, khi file chưa ton tia
         try {
-            String rootPath = System.getProperty("user.dir");
-            File file = new File(rootPath, fileName);
-            if (file.createNewFile()){
-                System.out.println("File Created" + file.getAbsolutePath());
+            File directory = new File(rootPath);
+            // Kiểm tra xem thư mục đã tồn tại chưa, nếu chưa thì tạo thư mục
+            if (!directory.exists()) {
+                directory.mkdirs(); // Tạo thư mục nếu không tồn tại
             }
-            else {
-                System.out.println("File Existed" + file.getAbsolutePath());
+
+            File file = new File(directory, fileName);
+            if (file.createNewFile()) {
+                System.out.println("File Created: " + file.getAbsolutePath());
+            } else {
+                System.out.println("File Already Exists: " + file.getAbsolutePath());
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             System.out.println("Error creating file");
             e.printStackTrace();
-
         }
-
     }
+
 
     @Override
     public boolean checkFile(String fileName) {
-        String rootPath = System.getProperty("user.dir");
         File file = new File(rootPath, fileName);
         return file.exists();
     }
 
     @Override
     public String readFile(String fileName) {
-        //doc noi dung cua file
+        //doc nd cua file
         try {
-            String rootPath = System.getProperty("user.dir");
             return new String(Files.readAllBytes(Paths.get(rootPath, fileName)));
         }
         catch(IOException e)
@@ -62,8 +65,8 @@ public class FileService implements IFileService {
         //ghi nd vao file
         try
         {
-            String rootPath = System.getProperty("user.dir");
-            FileWriter writer = new FileWriter(new File(rootPath,fileName));
+            FileWriter writer = new FileWriter(new File(rootPath, fileName), false);
+
             writer.write(content);
             writer.close();
             System.out.println("File Written" + fileName);

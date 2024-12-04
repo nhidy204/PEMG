@@ -21,18 +21,22 @@ public class UserController {
     public void register() {
         String username = validateService.inputString("Enter username: ", null);
         String password = validateService.inputString("Enter password: ", null);
-        userService.registerUser(username, password);
+
+        // Sử dụng isUsernameTaken để kiểm tra
+        if (userService.isUsernameTaken(username)) {
+            System.out.println("Username is already taken. Please try a different one.");
+        } else {
+            userService.registerUser(username, password);
+        }
     }
+
 
     public boolean login() {
         String loginUsername = validateService.inputString("Login with your username: ", null);
         String loginPassword = validateService.inputString("Enter your password: ", null);
 
-        // Attempt to retrieve the user from the service
         User user = userService.loginUser(loginUsername, loginPassword);
-
         if (user != null) {
-            System.out.println("Login successful!");
             loggedInUser = user;  // Set loggedInUser to the authenticated user
             showPostLoginMenu();
             return true;

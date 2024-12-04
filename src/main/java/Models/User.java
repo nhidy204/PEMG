@@ -8,19 +8,20 @@ public class User {
     public String email;
     public String password;
     public String name;
-    public  LocalDateTime createdAt;
-    public LocalDateTime updatedAt;
+    public String createdAt;
+    public String updatedAt;
+    private Object username;
 
     public User() {
     }
 
-    public User(UUID id, String email, String name, String password) {
+    public User( String email, String name, String password) {
         this.id = UUID.randomUUID();
         this.email = email;
         this.password = password;
         this.name = name;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now().toString();
+        this.updatedAt = LocalDateTime.now().toString();
     }
     public UUID getId() {
         return id;
@@ -34,15 +35,23 @@ public class User {
     public String getName() {
         return name;
     }
-    public LocalDateTime getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
-    public LocalDateTime getUpdatedAt() {
+    public String getUpdatedAt() {
         return updatedAt;
     }
 
     @Override
     public String toString() {
         return "User ID: " + id + "\nEmail: " + email + "\nName: " + name;
+    }
+
+    public Object getUsername() {
+        return username;
+    }
+
+    public void setUsername(Object username) {
+        this.username = username;
     }
 }
