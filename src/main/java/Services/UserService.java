@@ -39,7 +39,7 @@ public class UserService implements IUserService {
                 return;
             }
         }
-        User newUser = new User(username, username, password);
+        User newUser = new User(username, password);
         users.add(newUser);
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -54,7 +54,7 @@ public class UserService implements IUserService {
     @Override
     public User loginUser(String username, String password) {
         for (User user : users) {
-            if (user.getEmail().equals(username) && user.getPassword().equals(password)) {
+            if (user.getName().equals(username) && user.getPassword().equals(password)) {
                 System.out.println("Login successful!");
                 return user;
             }
@@ -72,10 +72,9 @@ public class UserService implements IUserService {
     public void viewReports() {
     }
 
-    @Override
     public boolean isUsernameTaken(String username) {
         for (User user : users) {
-            if (user.getEmail().equals(username)) { // Kiểm tra email trùng lặp
+            if (user.getName().equals(username)) { // Kiểm tra name
                 return true;
             }
         }

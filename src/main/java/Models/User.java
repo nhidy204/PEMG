@@ -5,7 +5,6 @@ import java.util.UUID;
 
 public class User {
     public UUID id;
-    public String email;
     public String password;
     public String name;
     public String createdAt;
@@ -15,9 +14,8 @@ public class User {
     public User() {
     }
 
-    public User( String email, String name, String password) {
+    public User(String name, String password) {
         this.id = UUID.randomUUID();
-        this.email = email;
         this.password = password;
         this.name = name;
         this.createdAt = LocalDateTime.now().toString();
@@ -25,9 +23,6 @@ public class User {
     }
     public UUID getId() {
         return id;
-    }
-    public String getEmail() {
-        return email;
     }
     public String getPassword() {
         return password;
@@ -44,7 +39,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User ID: " + id + "\nEmail: " + email + "\nName: " + name;
+        return "User ID: " + id + "\nName: " + name;
     }
 
     public Object getUsername() {
