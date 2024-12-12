@@ -27,15 +27,4 @@ public class FileController {
         }
         return;
     }
-
-    void writeToFile(String content) {
-        // Ghi nd vào file
-        fileService.writeFile(FileConstants.USER_FILE_NAME, content);
-    }
-
-    void readFileContent() {
-        // Đọc và hiển thị nd
-        String content = fileService.readFile(FileConstants.USER_FILE_NAME);
-        System.out.println("File content: " + content);
-    }
 }

@@ -1,5 +1,6 @@
 package Services;
 
+
 import Constants.FileConstants;
 import Models.User;
 import Services.Interfaces.IUserService;
@@ -14,15 +15,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
 public class UserService implements IUserService {
     public static UserService instance;
     public List<User> users = new ArrayList<>();
     private final String FILE_PATH = FileConstants.ROOT_PATH + "/" + FileConstants.USER_FILE_NAME;
 
+
     public UserService() {
         users = new ArrayList<>();
         loadUsers();
     }
+
 
     public static UserService getInstance() {
         if (instance == null) {
@@ -31,16 +35,18 @@ public class UserService implements IUserService {
         return instance;
     }
 
+
     @Override
-    public void registerUser(String username, String password) {
+    public User registerUser(String username, String password) {
         for (User user : users) {
             if (user.getUsername() != null && user.getUsername().equals(username)) {
                 System.out.println("Username already exists. Please choose a different username.");
-                return;
+                return user;
             }
         }
         User newUser = new User(username, password);
         users.add(newUser);
+
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (FileWriter writer = new FileWriter(FILE_PATH)) {
@@ -49,7 +55,9 @@ public class UserService implements IUserService {
             System.out.println("Error writing to file: " + e.getMessage());
         }
         System.out.println("User registered successfully!");
+        return newUser;
     }
+
 
     @Override
     public User loginUser(String username, String password) {
@@ -63,10 +71,12 @@ public class UserService implements IUserService {
         return null;
     }
 
+
     @Override
     public double getUserBalance() {
         return 0;
     }
+
 
     @Override
     public void viewReports() {
@@ -81,8 +91,6 @@ public class UserService implements IUserService {
         return false;
     }
 
-
-
     private void loadUsers() {
         Gson gson = new Gson();
         try (FileReader reader = new FileReader(FILE_PATH)) {
@@ -90,12 +98,11 @@ public class UserService implements IUserService {
             char[] buffer = new char[1024];
             int charsRead;
 
+
             while ((charsRead = reader.read(buffer)) != -1) {
                 contentBuilder.append(buffer, 0, charsRead);
             }
-
             String content = contentBuilder.toString().trim();
-
             if (content.isEmpty()) {
                 System.out.println("File is empty.");
                 users = new ArrayList<>();
@@ -117,6 +124,7 @@ public class UserService implements IUserService {
                 System.out.println("No valid user data found in the file.");
             }
 
+
             System.out.println("Loaded users: " + users.size());
         } catch (FileNotFoundException e) {
             System.out.println("No users file found at " + FILE_PATH + ", starting with an empty list.");
@@ -129,5 +137,26 @@ public class UserService implements IUserService {
             users = new ArrayList<>();
         }
     }
+    public void saveUserToFile(User user) {
+        Gson gson = new Gson();
+        try (FileWriter writer = new FileWriter("users.json", false)) {
+            gson.toJson(user, writer); // Lưu thông tin người dùng vào file JSON
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public User loadUserFromFile(String username) {
+        Gson gson = new Gson();
+        try (FileReader reader = new FileReader("users.json")) {
+            User user = gson.fromJson(reader, User.class); // Đọc và trả về đối tượng User từ file JSON
+            return user;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+
 
 }

@@ -4,27 +4,38 @@ import java.util.UUID;
 
 public class Wallet {
     public UUID id;
-    public LocalDateTime createdAt;
-    public LocalDateTime updatedAt;
+    public String createdAt;
+    public String updatedAt;
     public double balance;
     public UUID userId;
 
-    public Wallet() {
+    public Wallet(double v) {
+        this.balance = 1000;
+    }
+
+    public void addIncome(double amount) {
+        this.balance += amount;
+    }
+
+    public boolean subtractExpense(double amount) {
+        this.balance -= amount;
+        return false;
     }
 
     public Wallet(LocalDateTime createdAt, LocalDateTime updatedAt, UUID id, UUID userId, double balance) {
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.createdAt = createdAt.toString();
+        this.updatedAt = updatedAt.toString();
         this.id = id;
         this.userId = userId;
         this.balance = balance;
     }
 
-    public LocalDateTime getCreatedAt() {
+
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -36,11 +47,11 @@ public class Wallet {
         this.id = id;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public String getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
+    public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
 
@@ -58,5 +69,9 @@ public class Wallet {
 
     public void setUserId(UUID userId) {
         this.userId = userId;
+    }
+    @Override
+    public String toString() {
+        return "Wallet balance: $" + balance;
     }
 }

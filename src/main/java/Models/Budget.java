@@ -8,21 +8,34 @@ public class Budget {
     public int expenseTargetId;
     public double maximumAmount;
     public String budgetName;
-    public LocalDateTime createdAt;
-    public LocalDateTime updatedAt;
+    public String createdAt;
+    public String updatedAt;
+    public String expenseTarget;
 
     public Budget() {
     }
 
-    public Budget (int budgetId, UUID id, UUID userId, int expenseTargetId, double maximumAmount, String budgetName) {
+    public Budget (int budgetId, UUID id, UUID userId, int expenseTargetId, double maximumAmount, String budgetName, String expenseTarget) {
         this.id = UUID.randomUUID();
         this.userId = userId;
         this.expenseTargetId = expenseTargetId;
         this.maximumAmount = maximumAmount;
         this.budgetName = budgetName;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now().toString();
+        this.updatedAt = LocalDateTime.now().toString();
+        this.expenseTarget = expenseTarget;
     }
+
+    public Budget(String budgetName, double budgetAmount) {
+        this.budgetName = budgetName;
+        this.maximumAmount = budgetAmount;
+    }
+    @Override
+    public String toString() {
+        return budgetName + " - $" + maximumAmount;
+    }
+
+
     public UUID getId() {
         return id;
     }
@@ -50,17 +63,21 @@ public class Budget {
     public void setBudgetName(String budgetName) {
         this.budgetName = budgetName;
     }
-    public LocalDateTime getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
-    public LocalDateTime getUpdatedAt() {
+    public String getUpdatedAt() {
         return updatedAt;
     }
-    public void setUpdatedAt(LocalDateTime updatedAt) {
+    public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Object getExpensexTarget() {
+        return null;
     }
 }
 

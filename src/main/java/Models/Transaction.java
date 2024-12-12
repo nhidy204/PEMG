@@ -1,66 +1,92 @@
 package Models;
+
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 public class Transaction {
-    public UUID id;
-    public UUID userId;
-    public double amount;
+    public static int counter = 0;
+    public final int id;
     public String type;
-    public Integer targetId;
-    public LocalDateTime createdAt;
-    public LocalDateTime updatedAt;
+    public double amount;
+    public String category;
+    public String expenseTarget;
+    public String createdAt;
+    public String updatedAt;
+    public String name;
 
-    public Transaction() {
-    }
-
-    public Transaction(int transactionId, UUID id, UUID userId, double amount, String type, Integer targetId) {
-        this.id = UUID.randomUUID();
-        this.userId = userId;
-        this.amount = amount;
+    public Transaction(String type, double amount, String category) {
+        this.id = ++counter;
         this.type = type;
-        this.targetId = targetId;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+        this.amount = amount;
+        this.category = category;
+        this.expenseTarget = "expense";
+        this.createdAt = LocalDateTime.now().toString();
+        this.updatedAt = LocalDateTime.now().toString();
     }
-    public UUID getId() {
+    public String getExpenseTarget() {
+        return expenseTarget;
+    }
+
+    public int getId() {
         return id;
     }
-    public UUID getUserId() {
-        return userId;
-    }
-    public void setUserId(UUID userId) {
-        this.userId = userId;
-    }
-    public double getAmount() {
-        return amount;
-    }
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
+
     public String getType() {
         return type;
     }
+
     public void setType(String type) {
         this.type = type;
     }
-    public Integer getTargetId() {
-        return targetId;
+
+    public double getAmount() {
+        return amount;
     }
-    public void setTargetId(Integer targetId) {
-        this.targetId = targetId;
+
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
-    public LocalDateTime getCreatedAt() {
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getCreatedAt() {
         return createdAt;
     }
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-    public void setCreatedAt(LocalDateTime createdAt) {
+
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
-    public void setUpdatedAt(LocalDateTime updatedAt) {
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
-}
 
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "id=" + id +
+                ", type='" + type + '\'' +
+                ", amount=" + amount +
+                ", category='" + category + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}

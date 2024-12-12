@@ -1,7 +1,6 @@
 package Services;
 
 import Services.Interfaces.IValidateService;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -39,13 +38,15 @@ public class ValidateService implements IValidateService {
         }
     }
 
-    public double inputDouble(String mess, double min, double max) {
+    public double inputDouble(String mess) {
         System.out.print(mess);
 
         while(true) {
             String input = sc.nextLine();
             try {
                 double number = Double.parseDouble(input);
+                double min = 1;
+                double max = 1000;
                 if (number < min || number > max) {
                     System.out.print("Please input between " + min + ", " + max + ": ");
                     continue;

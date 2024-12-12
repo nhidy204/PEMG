@@ -7,19 +7,28 @@ public class FinancialGoal {
     public UUID userId;
     public String name;
     public double targetAmount;
-    public LocalDateTime createdAt;
-    public LocalDateTime updatedAt;
+    public String createdAt;
+    public String updatedAt;
 
-    public FinancialGoal() {
+    public FinancialGoal(String goalName, double goalAmount) {
+        this.id = UUID.randomUUID(); // Tự động tạo UUID mới
+        this.name = goalName;
+        this.targetAmount = goalAmount;
+        this.createdAt = LocalDateTime.now().toString(); // Gán thời gian hiện tại
+        this.updatedAt = LocalDateTime.now().toString();
     }
 
     public FinancialGoal(int financialGoalID, UUID id, UUID userId, String name, double targetAmount) {
-        this.id = UUID.randomUUID();
+        this.id = id != null ? id : UUID.randomUUID(); // Sử dụng ID được truyền vào hoặc tự động tạo
         this.userId = userId;
         this.name = name;
         this.targetAmount = targetAmount;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now().toString();
+        this.updatedAt = LocalDateTime.now().toString();
+    }
+    @Override
+    public String toString() {
+        return name + " - Target: $" + targetAmount;
     }
     public UUID getId() {
         return id;
@@ -42,16 +51,16 @@ public class FinancialGoal {
     public void setTargetAmount(double targetAmount) {
         this.targetAmount = targetAmount;
     }
-    public LocalDateTime getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
-    public LocalDateTime getUpdatedAt() {
+    public String getUpdatedAt() {
         return updatedAt;
     }
-    public void setUpdatedAt(LocalDateTime updatedAt) {
+    public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
 }
