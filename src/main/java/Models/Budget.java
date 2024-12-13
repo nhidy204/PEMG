@@ -3,82 +3,83 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Budget {
-    public UUID id;
-    public UUID userId;
-    public int expenseTargetId;
+    public String id;
+    public String userId;
+    public String expenseTargetId;
     public double maximumAmount;
     public String budgetName;
     public String createdAt;
     public String updatedAt;
-    public String expenseTarget;
 
     public Budget() {
     }
 
-    public Budget (int budgetId, UUID id, UUID userId, int expenseTargetId, double maximumAmount, String budgetName, String expenseTarget) {
-        this.id = UUID.randomUUID();
+    public Budget(String id, String userId, String expenseTargetId, double maximumAmount, String budgetName, String createdAt, String updatedAt) {
+        this.id = UUID.randomUUID().toString();
         this.userId = userId;
         this.expenseTargetId = expenseTargetId;
         this.maximumAmount = maximumAmount;
         this.budgetName = budgetName;
         this.createdAt = LocalDateTime.now().toString();
         this.updatedAt = LocalDateTime.now().toString();
-        this.expenseTarget = expenseTarget;
     }
 
-    public Budget(String budgetName, double budgetAmount) {
-        this.budgetName = budgetName;
-        this.maximumAmount = budgetAmount;
-    }
-    @Override
-    public String toString() {
-        return budgetName + " - $" + maximumAmount;
-    }
-
-
-    public UUID getId() {
+    public String getId() {
         return id;
     }
-    public UUID getUserId() {
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getUserId() {
         return userId;
     }
-    public void setUserId(UUID userId) {
+
+    public void setUserId(String userId) {
         this.userId = userId;
     }
-    public int getExpenseTargetId() {
+
+    public String getExpenseTargetId() {
         return expenseTargetId;
     }
-    public void setExpenseTargetId(int expenseTargetId) {
+
+    public void setExpenseTargetId(String expenseTargetId) {
         this.expenseTargetId = expenseTargetId;
     }
+
     public double getMaximumAmount() {
         return maximumAmount;
     }
+
     public void setMaximumAmount(double maximumAmount) {
         this.maximumAmount = maximumAmount;
     }
+
     public String getBudgetName() {
         return budgetName;
     }
+
     public void setBudgetName(String budgetName) {
         this.budgetName = budgetName;
     }
+
     public String getCreatedAt() {
         return createdAt;
     }
+
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
+
     public String getUpdatedAt() {
         return updatedAt;
     }
+
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
 
-    public Object getExpensexTarget() {
-        return null;
-    }
 }
 
 

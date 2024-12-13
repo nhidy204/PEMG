@@ -7,6 +7,7 @@ import Services.Interfaces.IUserService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -23,7 +24,6 @@ public class UserService implements IUserService {
 
 
     public UserService() {
-        users = new ArrayList<>();
         loadUsers();
     }
 
@@ -54,7 +54,6 @@ public class UserService implements IUserService {
         } catch (IOException e) {
             System.out.println("Error writing to file: " + e.getMessage());
         }
-        System.out.println("User registered successfully!");
         return newUser;
     }
 
@@ -62,7 +61,7 @@ public class UserService implements IUserService {
     @Override
     public User loginUser(String username, String password) {
         for (User user : users) {
-            if (user.getName().equals(username) && user.getPassword().equals(password)) {
+            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
                 System.out.println("Login successful!");
                 return user;
             }
@@ -84,7 +83,7 @@ public class UserService implements IUserService {
 
     public boolean isUsernameTaken(String username) {
         for (User user : users) {
-            if (user.getName().equals(username)) { // Kiểm tra name
+            if (user.getUsername().equals(username)) {
                 return true;
             }
         }
@@ -137,26 +136,26 @@ public class UserService implements IUserService {
             users = new ArrayList<>();
         }
     }
-    public void saveUserToFile(User user) {
-        Gson gson = new Gson();
-        try (FileWriter writer = new FileWriter("users.json", false)) {
-            gson.toJson(user, writer); // Lưu thông tin người dùng vào file JSON
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    public User loadUserFromFile(String username) {
-        Gson gson = new Gson();
-        try (FileReader reader = new FileReader("users.json")) {
-            User user = gson.fromJson(reader, User.class); // Đọc và trả về đối tượng User từ file JSON
-            return user;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 
-
-
+//    public void saveUserToFile(User user) {
+//        Gson gson = new Gson();
+//        try (FileWriter writer = new FileWriter("users.json", false)) {
+//            gson.toJson(user, writer); // Lưu thông tin người dùng vào file JSON
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public User loadUserFromFile(String username) {
+//        Gson gson = new Gson();
+//        try (FileReader reader = new FileReader("users.json")) {
+//            User user = gson.fromJson(reader, User.class); // Đọc và trả về đối tượng User từ file JSON
+//            return user;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
+//
 
 }

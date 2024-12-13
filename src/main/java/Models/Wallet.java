@@ -3,33 +3,30 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Wallet {
-    public UUID id;
+    public String id;
     public String createdAt;
     public String updatedAt;
     public double balance;
-    public UUID userId;
+    public String userId;
 
-    public Wallet(double v) {
-        this.balance = 1000;
+    public Wallet() {
     }
 
-    public void addIncome(double amount) {
-        this.balance += amount;
-    }
-
-    public boolean subtractExpense(double amount) {
-        this.balance -= amount;
-        return false;
-    }
-
-    public Wallet(LocalDateTime createdAt, LocalDateTime updatedAt, UUID id, UUID userId, double balance) {
-        this.createdAt = createdAt.toString();
-        this.updatedAt = updatedAt.toString();
-        this.id = id;
-        this.userId = userId;
+    public Wallet(String id, String createdAt, String updatedAt, double balance, String userId) {
+        this.id = UUID.randomUUID().toString();
+        this.createdAt = LocalDateTime.now().toString();;
+        this.updatedAt = LocalDateTime.now().toString();;
         this.balance = balance;
+        this.userId = userId;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getCreatedAt() {
         return createdAt;
@@ -37,14 +34,6 @@ public class Wallet {
 
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public String getUpdatedAt() {
@@ -63,15 +52,11 @@ public class Wallet {
         this.balance = balance;
     }
 
-    public UUID getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(UUID userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
-    }
-    @Override
-    public String toString() {
-        return "Wallet balance: $" + balance;
     }
 }

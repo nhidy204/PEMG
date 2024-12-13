@@ -1,33 +1,41 @@
 package Models;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class Transaction {
-    public static int counter = 0;
-    public final int id;
+
+    public String id;
     public String type;
     public double amount;
     public String category;
-    public String expenseTarget;
+    public String expenseTargetId;
     public String createdAt;
     public String updatedAt;
     public String name;
+    public String userId;
 
-    public Transaction(String type, double amount, String category) {
-        this.id = ++counter;
+    public Transaction() {
+    }
+
+    public Transaction(String id, String type, double amount, String category, String expenseTargetId, String createdAt, String updatedAt, String name,String userId) {
+        this.id = UUID.randomUUID().toString();
         this.type = type;
         this.amount = amount;
         this.category = category;
-        this.expenseTarget = "expense";
-        this.createdAt = LocalDateTime.now().toString();
-        this.updatedAt = LocalDateTime.now().toString();
-    }
-    public String getExpenseTarget() {
-        return expenseTarget;
+        this.expenseTargetId = expenseTargetId;
+        this.createdAt = LocalDateTime.now().toString();;
+        this.updatedAt = LocalDateTime.now().toString();;
+        this.name = name;
+        this.userId = userId;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getType() {
@@ -54,6 +62,14 @@ public class Transaction {
         this.category = category;
     }
 
+    public String getExpenseTargetId() {
+        return expenseTargetId;
+    }
+
+    public void setExpenseTargetId(String expenseTargetId) {
+        this.expenseTargetId = expenseTargetId;
+    }
+
     public String getCreatedAt() {
         return createdAt;
     }
@@ -70,23 +86,19 @@ public class Transaction {
         this.updatedAt = updatedAt;
     }
 
-    @Override
-    public String toString() {
-        return "Transaction{" +
-                "id=" + id +
-                ", type='" + type + '\'' +
-                ", amount=" + amount +
-                ", category='" + category + '\'' +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

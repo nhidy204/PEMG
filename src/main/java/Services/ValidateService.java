@@ -1,6 +1,7 @@
 package Services;
 
 import Services.Interfaces.IValidateService;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -8,6 +9,7 @@ import java.util.Scanner;
 
 public class ValidateService implements IValidateService {
     public static ValidateService instance;
+
     public ValidateService() {
     }
 
@@ -22,7 +24,7 @@ public class ValidateService implements IValidateService {
 
     public int inputInt(String mess, int min, int max) {
         System.out.print(mess);
-        while(true) {
+        while (true) {
             String input = sc.nextLine();
             try {
                 int number = Integer.parseInt(input);
@@ -41,7 +43,7 @@ public class ValidateService implements IValidateService {
     public double inputDouble(String mess) {
         System.out.print(mess);
 
-        while(true) {
+        while (true) {
             String input = sc.nextLine();
             try {
                 double number = Double.parseDouble(input);
@@ -83,7 +85,7 @@ public class ValidateService implements IValidateService {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         dateFormat.setLenient(false);
 
-        while(true) {
+        while (true) {
             String input = sc.nextLine();
             try {
                 Date date = dateFormat.parse(input);
@@ -99,4 +101,17 @@ public class ValidateService implements IValidateService {
             }
         }
     }
+
+    public Boolean inputYesNo(String mess) {
+        while (true) {
+            String input = inputString(mess+"(Y/N)",null);
+            if (input.equalsIgnoreCase("y")) {
+                return true;
+            }
+            if (input.equalsIgnoreCase("n")) {
+                return false;
+            }
+        }
+    }
+
 }
