@@ -7,10 +7,10 @@ import Services.ValidateService;
 
 public class Main {
     public static void main(String[] args) {
-        FileController fileController = new FileController();
-        fileController.createUserFile();
-        ValidateService validateService = ValidateService.getInstance();
-        UserController userController = new UserController();
+        FileController fileController = new FileController(); //tao 1 instance cho fileController de quan ly tep du lieu
+        fileController.createUserFile(); //tao tep chua thong tin user
+        ValidateService validateService = ValidateService.getInstance(); //khoi tao validateService de xac thuc va lay du lieu tu nguoi dung
+        UserController userController = new UserController();  //khoi tao userController de quan ly chuc nang lien quan den nguoi dung
         User currentUser = new User();
         while (true) {
             System.out.println("--------------------------------------------------");
@@ -23,12 +23,12 @@ public class Main {
 
             switch (option) {
                 case 1:
-                    userController.register();
+                    userController.register(); //goi phuong thuc register tu userController
                     break;
                 case 2:
-                    User user = userController.login();
+                    User user = userController.login(); //goi phuong thuc login tu userController va luu user hien tai neu login thanh cong
                     if (user != null) {
-                        currentUser = user;
+                        currentUser = user; //luu thong tin user hien tai
                     }
                     break;
                 case 3:

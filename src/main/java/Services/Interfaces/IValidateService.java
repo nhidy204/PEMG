@@ -5,5 +5,5 @@ public interface IValidateService {
     double inputDouble(String mess);
     String inputString(String mess, String regex);
     String inputDate(String mess);
-    Boolean inputYesNo(String mess);
+    Boolean inputYesNo(String mess); //nhap lua chon Y/N
 }
