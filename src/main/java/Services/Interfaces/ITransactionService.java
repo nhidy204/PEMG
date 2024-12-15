@@ -1,10 +1,13 @@
 package Services.Interfaces;
+
 import Models.Transaction;
-import java.util.List;
+import java.util.ArrayList;
 
 public interface ITransactionService {
-    void addTransaction(Transaction transaction); // Thêm giao dịch
-    List<Transaction> listTransactions();        // Danh sách giao dịch
-    void editTransaction(int id, Transaction updatedTransaction); // Sửa giao dịch
-    void deleteTransaction(int id);              // Xóa giao dịch
+    void addTransaction(Transaction transaction, ArrayList<Transaction> transactions);
+    ArrayList<Transaction> listTransactions(ArrayList<Transaction> transactions);
+    void editTransaction(String transactionId, Transaction updatedTransaction, ArrayList<Transaction> transactions);
+    void deleteTransaction(String transactionId, ArrayList<Transaction> transactions);
+    void saveTransactions(ArrayList<Transaction> transactions);
+    ArrayList<Transaction> loadTransactions();
 }

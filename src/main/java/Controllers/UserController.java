@@ -5,7 +5,9 @@ import Services.*;
 import Services.Interfaces.IUserService;
 import Services.Interfaces.IValidateService;
 
+import java.util.ArrayList;
 import java.util.Scanner;
+
 //controller cho function lien quan den nguoi dung
 public class UserController {
     private final IUserService userService; //interface cho dich vu lq toi nguoi dung
@@ -19,82 +21,48 @@ public class UserController {
 
     }
 
-    public void register() {
+    public void register(ArrayList<User> users) {
         //yeu cau nhap username va password
         String username = validateService.inputString("Enter username: ", null);
         String password = validateService.inputString("Enter password: ", null);
 
         //kiem tra xem username da ton tai hay chua
-        if (userService.isUsernameTaken(username)) {
+        if (userService.isUsernameTaken(username, users)) {
             System.out.println("Username is already taken. Please try a different one.");
         } else {
             //register newUser va thong bao thanh cong
-            User newUser = userService.registerUser(username, password);
+            User newUser = userService.registerUser(username, password, users);
             System.out.println(newUser.username + " registered successfully.");
         }
     }
 
-    public User login() {
+    public User login(ArrayList<User> users) {
         //nhap username va password login
         String loginUsername = validateService.inputString("Login with your username: ", null);
         String loginPassword = validateService.inputString("Enter your password: ", null);
 
         //goi user de xac thuc thong tin dang nhap
-        User user = userService.loginUser(loginUsername, loginPassword);
+        User user = userService.loginUser(loginUsername, loginPassword, users);
         //vong lap, neu user login fail thi hien thi lua chon Y/N cho nguoi dung neu muon login tiep
         while (user == null) {
             Boolean option = validateService.inputYesNo("Login again?");
-            if (option){
+            if (option) {
                 loginUsername = validateService.inputString("Login with your username: ", null);
                 loginPassword = validateService.inputString("Enter your password: ", null);
 
-                user = userService.loginUser(loginUsername, loginPassword);
-            }else {
-                return null; //neu chon N -> tra ve null
+                user = userService.loginUser(loginUsername, loginPassword, users);
+            } else {
+               return null;
             }
         }
         //neu login thanh cong thi hien thi menu sau khi dang nhap
-        showPostLoginMenu();
-        return user;
+       return user;
+    }
+
+    public ArrayList<User> loadUser() {
+        return userService.loadUsers();
     }
 
     //hien thi menu sau khi dang nhap
-    private void showPostLoginMenu() {
-        while (true) {
-            System.out.println("Menu for you:");
-            System.out.println("1. Transaction");
-            System.out.println("2. Budget");
-            System.out.println("3. Financial Goals");
-            System.out.println("4. Wallet");
-            System.out.println("5. Logout");
 
-            int choice = validateService.inputInt("Choose an option: ", 1, 5);
-
-            switch (choice) {
-                case 1:
-                    break;
-
-                case 2:
-
-                    break;
-
-                case 3:
-
-                    break;
-
-                case 4: // Wallet
-
-                    break;
-
-
-                case 5:
-
-                    return;
-
-                default:
-                    System.out.println("Invalid choice. Please try again.");
-            }
-
-        }
-    }
 }

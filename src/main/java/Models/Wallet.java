@@ -1,23 +1,35 @@
 package Models;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Wallet {
-    public String id;
-    public String createdAt;
-    public String updatedAt;
-    public double balance;
-    public String userId;
+    private String id;
+    private String createdAt;
+    private String updatedAt;
+    private double balance;
+    private String userId;
+    private String name;
 
     public Wallet() {
     }
 
-    public Wallet(String id, String createdAt, String updatedAt, double balance, String userId) {
+    public Wallet(String id, String createdAt, String updatedAt, double balance, String userId, String name) {
         this.id = UUID.randomUUID().toString();
-        this.createdAt = LocalDateTime.now().toString();;
-        this.updatedAt = LocalDateTime.now().toString();;
+        this.createdAt = LocalDateTime.now().toString();
+        this.updatedAt = LocalDateTime.now().toString();
         this.balance = balance;
         this.userId = userId;
+        this.name = name;
+    }
+
+    public Wallet(String userId, String id, double balance, String name) {
+        this.id = id;
+        this.createdAt = LocalDateTime.now().toString();
+        this.updatedAt = LocalDateTime.now().toString();
+        this.balance = balance;
+        this.userId = userId;
+        this.name = name;
     }
 
     public String getId() {
@@ -58,5 +70,13 @@ public class Wallet {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
