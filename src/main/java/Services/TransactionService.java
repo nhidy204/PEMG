@@ -22,42 +22,62 @@ public class TransactionService implements ITransactionService {
     private static TransactionService instance;
     private final String FILE_PATH = FileConstants.ROOT_PATH + "/" + FileConstants.TRANSACTION_FILE_NAME;
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    private final IWalletService walletService = WalletService.getInstance();
-    private final IBudgetService budgetService = BudgetService.getInstance();
+    private final IWalletService walletService;
+    private final IBudgetService budgetService;
 
-    private TransactionService() {}
+    private TransactionService(IWalletService walletService, IBudgetService budgetService) {
+        this.walletService = walletService;
+        this.budgetService = budgetService;
+    }
 
-    public static TransactionService getInstance() {
+    public static TransactionService getInstance(IWalletService walletService, IBudgetService budgetService) {
         if (instance == null) {
-            instance = new TransactionService();
+            instance = new TransactionService(walletService, budgetService);
         }
         return instance;
     }
 
     @Override
     public void addTransaction(Transaction transaction, ArrayList<Transaction> transactions) {
-        if (transaction.getType().equalsIgnoreCase("income")) {
-            Wallet wallet = walletService.getWalletById(transaction.getUserId());
-            if (wallet != null) {
-                wallet.setBalance(wallet.getBalance() + transaction.getAmount());
-                walletService.saveWallets(walletService.loadWallets());
+        Wallet wallet = walletService.getWalletByUserId(transaction.getUserId());
+        if (wallet == null) {
+            System.out.println("Wallet not found for user ID: " + transaction.getUserId());
+            return;
+        }
+
+        if (transaction.getType().equals("income")) {
+            double newBalance = wallet.getBalance() + transaction.getAmount();
+            ArrayList<Wallet> currentWallets = walletService.loadWallets();
+            for (Wallet currentWallet : currentWallets) {
+                if (wallet.getId().equals(currentWallet.getId())) {
+                    currentWallet.setBalance(newBalance);
+                    break;
+                }
             }
-        } else if (transaction.getType().equalsIgnoreCase("expense")) {
+            walletService.saveWallets(currentWallets);
+        } else if (transaction.getType().equals("expense")) {
             Budget budget = budgetService.getBudgetByExpenseTargetId(transaction.getExpenseTargetId());
             if (budget != null) {
-                double totalExpense = transactions.stream()
-                        .filter(t -> t.getExpenseTargetId().equals(transaction.getExpenseTargetId()))
-                        .mapToDouble(Transaction::getAmount)
-                        .sum();
-                if (totalExpense + transaction.getAmount() > budget.getMaximumAmount()) {
+                ArrayList<Transaction> userTransactions = listTransactions(transaction.getUserId(), transactions);
+                double totalExpense = transaction.getAmount();
+                for (Transaction t : userTransactions) {
+                    if (t.getExpenseTargetId() != null && t.getExpenseTargetId().equals(transaction.getExpenseTargetId())) {
+                        totalExpense += t.getAmount();
+                    }
+                }
+                if (totalExpense > budget.getMaximumAmount()) {
                     System.out.println("Transaction exceeds budget limit. Cannot create transaction.");
                     return;
                 } else {
-                    Wallet wallet = walletService.getWalletById(transaction.getUserId());
-                    if (wallet != null) {
-                        wallet.setBalance(wallet.getBalance() - transaction.getAmount());
-                        walletService.saveWallets(walletService.loadWallets());
+                    double newBalance = wallet.getBalance() - transaction.getAmount();
+                    ArrayList<Wallet> currentWallets = walletService.loadWallets();
+                    for (Wallet currentWallet : currentWallets) {
+                        if (wallet.getId().equals(currentWallet.getId())) {
+                            currentWallet.setBalance(newBalance);
+                            break;
+                        }
                     }
+                    walletService.saveWallets(currentWallets);
                 }
             }
         }
@@ -67,8 +87,14 @@ public class TransactionService implements ITransactionService {
     }
 
     @Override
-    public ArrayList<Transaction> listTransactions(ArrayList<Transaction> transactions) {
-        return transactions;
+    public ArrayList<Transaction> listTransactions(String userId, ArrayList<Transaction> transactions) {
+        ArrayList<Transaction> userTransactions = new ArrayList<>();
+        for (Transaction transaction : transactions) {
+            if (transaction.getUserId().equals(userId)) {
+                userTransactions.add(transaction);
+            }
+        }
+        return userTransactions;
     }
 
     @Override
@@ -79,8 +105,8 @@ public class TransactionService implements ITransactionService {
                 transaction.setAmount(updatedTransaction.getAmount());
                 transaction.setCategory(updatedTransaction.getCategory());
                 transaction.setExpenseTargetId(updatedTransaction.getExpenseTargetId());
-                transaction.setUpdatedAt(updatedTransaction.getUpdatedAt());
                 transaction.setName(updatedTransaction.getName());
+                transaction.setUpdatedAt(updatedTransaction.getUpdatedAt());
                 saveTransactions(transactions);
                 System.out.println("Transaction updated successfully.");
                 return;
@@ -109,6 +135,9 @@ public class TransactionService implements ITransactionService {
     public ArrayList<Transaction> loadTransactions() {
         try (FileReader reader = new FileReader(FILE_PATH)) {
             Transaction[] transactionsArray = gson.fromJson(reader, Transaction[].class);
+            if (transactionsArray == null) {
+                return new ArrayList<>();
+            }
             return new ArrayList<>(Arrays.asList(transactionsArray));
         } catch (FileNotFoundException e) {
             System.out.println("Transaction file not found. Creating a new one.");

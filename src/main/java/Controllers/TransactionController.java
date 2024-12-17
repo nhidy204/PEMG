@@ -21,7 +21,7 @@ public class TransactionController {
         this.transactions = transactionService.loadTransactions();
     }
 
-    public void showTransactionMenu() {
+    public void showTransactionMenu(String userId) {
         while (true) {
             System.out.println("Menu for you:");
             System.out.println("1. Add Transaction");
@@ -34,16 +34,16 @@ public class TransactionController {
 
             switch (choice) {
                 case 1:
-                    addTransaction();
+                    addTransaction(userId);
                     break;
                 case 2:
-                    listTransactions();
+                    listTransactions(userId);
                     break;
                 case 3:
-                    editTransaction();
+                    editTransaction(userId);
                     break;
                 case 4:
-                    deleteTransaction();
+                    deleteTransaction(userId);
                     break;
                 case 5:
                     return;
@@ -53,12 +53,14 @@ public class TransactionController {
         }
     }
 
-    private void addTransaction() {
-        String userId = validateService.inputString("Enter user ID: ", null);
+    private void addTransaction(String userId) {
         String type = validateService.inputString("Enter transaction type (income/expense): ", null);
         double amount = validateService.inputDouble("Enter transaction amount: ");
         String category = validateService.inputString("Enter transaction category: ", null);
-        String expenseTargetId = validateService.inputString("Enter expense target ID: ", null);
+        String expenseTargetId = null;
+        if (type.equals("expense")) {
+            expenseTargetId = validateService.inputString("Enter expense target ID: ", null);
+        }
         String name = validateService.inputString("Enter transaction name: ", null);
 
         Transaction transaction = new Transaction(UUID.randomUUID().toString(), type, amount, category, expenseTargetId, LocalDateTime.now().toString(), LocalDateTime.now().toString(), name, userId);
@@ -66,27 +68,30 @@ public class TransactionController {
         saveTransactions();
     }
 
-    private void listTransactions() {
-        ArrayList<Transaction> transactionList = transactionService.listTransactions(transactions);
+    private void listTransactions(String userId) {
+        ArrayList<Transaction> transactionList = transactionService.listTransactions(userId, transactions);
         for (Transaction transaction : transactionList) {
-            System.out.println("Transaction Name: " + transaction.getName() + ", Amount: " + transaction.getAmount() + ", Type: " + transaction.getType() + ", ID: " + transaction.getId());
+            System.out.println("Transaction Name: " + transaction.getName() + ", Amount: " + transaction.getAmount() + ", ID: " + transaction.getId());
         }
     }
 
-    private void editTransaction() {
+    private void editTransaction(String userId) {
         String id = validateService.inputString("Enter transaction ID to edit: ", null);
         String type = validateService.inputString("Enter new transaction type (income/expense): ", null);
         double amount = validateService.inputDouble("Enter new transaction amount: ");
         String category = validateService.inputString("Enter new transaction category: ", null);
-        String expenseTargetId = validateService.inputString("Enter new expense target ID: ", null);
+        String expenseTargetId = null;
+        if (type.equals("expense")) {
+            expenseTargetId = validateService.inputString("Enter new expense target ID: ", null);
+        }
         String name = validateService.inputString("Enter new transaction name: ", null);
 
-        Transaction updatedTransaction = new Transaction(id, type, amount, category, expenseTargetId, LocalDateTime.now().toString(), LocalDateTime.now().toString(), name, null);
+        Transaction updatedTransaction = new Transaction(id, type, amount, category, expenseTargetId, LocalDateTime.now().toString(), LocalDateTime.now().toString(), name, userId);
         transactionService.editTransaction(id, updatedTransaction, transactions);
         saveTransactions();
     }
 
-    private void deleteTransaction() {
+    private void deleteTransaction(String userId) {
         String id = validateService.inputString("Enter transaction ID to delete: ", null);
         transactionService.deleteTransaction(id, transactions);
         saveTransactions();

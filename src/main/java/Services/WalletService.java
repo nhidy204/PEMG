@@ -30,14 +30,25 @@ public class WalletService implements IWalletService {
 
     @Override
     public void addWallet(Wallet wallet, ArrayList<Wallet> wallets) {
-        wallets.add(wallet);
-        saveWallets(wallets);
-        System.out.println("Wallet added successfully.");
+        Wallet existingWallet = getWalletByUserId(wallet.getUserId());
+        if (existingWallet == null) {
+            wallets.add(wallet);
+            saveWallets(wallets);
+            System.out.println("Wallet added successfully.");
+        } else {
+            System.out.println("User already has a wallet.");
+        }
     }
 
     @Override
-    public ArrayList<Wallet> listWallets(ArrayList<Wallet> wallets) {
-        return wallets;
+    public Wallet getWalletByUserId(String userId) {
+        ArrayList<Wallet> wallets = loadWallets();
+        for (Wallet wallet : wallets) {
+            if (wallet.getUserId().equals(userId)) {
+                return wallet;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -75,6 +86,9 @@ public class WalletService implements IWalletService {
     public ArrayList<Wallet> loadWallets() {
         try (FileReader reader = new FileReader(FILE_PATH)) {
             Wallet[] walletsArray = gson.fromJson(reader, Wallet[].class);
+            if (walletsArray == null) {
+                return new ArrayList<>();
+            }
             return new ArrayList<>(Arrays.asList(walletsArray));
         } catch (FileNotFoundException e) {
             System.out.println("Wallet file not found. Creating a new one.");

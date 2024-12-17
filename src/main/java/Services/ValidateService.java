@@ -66,7 +66,7 @@ public class ValidateService implements IValidateService {
 
     public String inputString(String mess /*thong bao hien thi cho user*/, String regex) { //nhan 1 chuoi hop le tu nguoi dung, dua vao regex
         if (regex == null || regex.isEmpty()) {
-            regex = "[A-Za-z0-9\\s]+"; //mac dinh regex cho so, chu cai, va khoang trang (regex: bthuc chinh quy de kiem tra chuoi dau vao)
+            regex = "[A-Za-z0-9\\s_-]+"; //mac dinh regex cho so, chu cai, va khoang trang (regex: bthuc chinh quy de kiem tra chuoi dau vao)
         }
 
         System.out.print(mess);

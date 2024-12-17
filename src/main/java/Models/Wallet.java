@@ -23,15 +23,6 @@ public class Wallet {
         this.name = name;
     }
 
-    public Wallet(String userId, String id, double balance, String name) {
-        this.id = id;
-        this.createdAt = LocalDateTime.now().toString();
-        this.updatedAt = LocalDateTime.now().toString();
-        this.balance = balance;
-        this.userId = userId;
-        this.name = name;
-    }
-
     public String getId() {
         return id;
     }

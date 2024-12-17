@@ -36,17 +36,24 @@ public class BudgetService implements IBudgetService {
     }
 
     @Override
-    public ArrayList<Budget> listBudgets(ArrayList<Budget> budgets) {
-        return budgets;
+    public ArrayList<Budget> listBudgets(String userId, ArrayList<Budget> budgets) {
+        ArrayList<Budget> userBudgets = new ArrayList<>();
+        for (Budget budget : budgets) {
+            if (budget.getUserId() != null && budget.getUserId().equals(userId)) {
+                userBudgets.add(budget);
+            }
+        }
+        return userBudgets;
     }
 
     @Override
     public void editBudget(String budgetId, Budget updatedBudget, ArrayList<Budget> budgets) {
         for (Budget budget : budgets) {
-            if (budget.getId().equals(budgetId)) {
+            if (budget.getId() != null && budget.getId().equals(budgetId)) {
                 budget.setMaximumAmount(updatedBudget.getMaximumAmount());
                 budget.setBudgetName(updatedBudget.getBudgetName());
                 budget.setUpdatedAt(updatedBudget.getUpdatedAt());
+                budget.setUserId(updatedBudget.getUserId());
                 saveBudgets(budgets);
                 System.out.println("Budget updated successfully.");
                 return;
@@ -57,7 +64,7 @@ public class BudgetService implements IBudgetService {
 
     @Override
     public void deleteBudget(String budgetId, ArrayList<Budget> budgets) {
-        budgets.removeIf(budget -> budget.getId().equals(budgetId));
+        budgets.removeIf(budget -> budget.getId() != null && budget.getId().equals(budgetId));
         saveBudgets(budgets);
         System.out.println("Budget deleted successfully.");
     }
@@ -75,6 +82,9 @@ public class BudgetService implements IBudgetService {
     public ArrayList<Budget> loadBudgets() {
         try (FileReader reader = new FileReader(FILE_PATH)) {
             Budget[] budgetsArray = gson.fromJson(reader, Budget[].class);
+            if (budgetsArray == null) {
+                return new ArrayList<>();
+            }
             return new ArrayList<>(Arrays.asList(budgetsArray));
         } catch (FileNotFoundException e) {
             System.out.println("Budget file not found. Creating a new one.");

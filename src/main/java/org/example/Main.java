@@ -7,48 +7,56 @@ import Controllers.WalletController;
 import Controllers.BudgetController;
 import Controllers.TransactionController;
 import Controllers.FinancialGoalController;
+import Controllers.ExpenseTargetController;
 import Services.ValidateService;
 import Services.WalletService;
 import Services.BudgetService;
 import Services.TransactionService;
 import Services.FinancialGoalService;
+import Services.ExpenseTargetService;
 import Services.Interfaces.IWalletService;
 import Services.Interfaces.IBudgetService;
 import Services.Interfaces.ITransactionService;
 import Services.Interfaces.IFinancialGoalService;
+import Services.Interfaces.IExpenseTargetService;
 
 import java.util.ArrayList;
 
 public class Main {
-    static void showPostLoginMenu(ValidateService validateService, User currentUser, WalletController walletController, BudgetController budgetController, TransactionController transactionController, FinancialGoalController financialGoalController) {
+    static void showPostLoginMenu(ValidateService validateService, User currentUser, WalletController walletController, BudgetController budgetController, TransactionController transactionController, FinancialGoalController financialGoalController, ExpenseTargetController expenseTargetController) {
         while (true) {
             System.out.println("Menu for you:");
-            System.out.println("1. Transaction");
+            System.out.println("1. Wallet");
             System.out.println("2. Budget");
-            System.out.println("3. Financial Goals");
-            System.out.println("4. Wallet");
-            System.out.println("5. Logout");
+            System.out.println("3. Transaction");
+            System.out.println("4. Expense Targets");
+            System.out.println("5. Financial Goals");
+            System.out.println("6. Logout");
 
-            int choice = validateService.inputInt("Choose an option: ", 1, 5);
+            int choice = validateService.inputInt("Choose an option: ", 1, 6);
 
             switch (choice) {
-                case 1: // Transaction
-                    System.out.println("Transaction of " + currentUser.getUsername());
-                    transactionController.showTransactionMenu();
+                case 1: // Wallet
+                    System.out.println("Wallet of " + currentUser.getUsername());
+                    walletController.showWalletMenu(currentUser.getId());
                     break;
                 case 2: // Budget
                     System.out.println("Budget of " + currentUser.getUsername());
-                    budgetController.showBudgetMenu();
+                    budgetController.showBudgetMenu(currentUser.getId());
                     break;
-                case 3: // Financial Goals
+                case 3: // Transaction
+                    System.out.println("Transaction of " + currentUser.getUsername());
+                    transactionController.showTransactionMenu(currentUser.getId());
+                    break;
+                case 4: // Expense Targets
+                    System.out.println("Expense Targets of " + currentUser.getUsername());
+                    expenseTargetController.showExpenseTargetMenu(currentUser.getId());
+                    break;
+                case 5: // Financial Goals
                     System.out.println("Financial Goals of " + currentUser.getUsername());
-                    financialGoalController.showFinancialGoalMenu();
+                    financialGoalController.showFinancialGoalMenu(currentUser.getId());
                     break;
-                case 4: // Wallet
-                    System.out.println("Wallet of " + currentUser.getUsername());
-                    walletController.showWalletMenu();
-                    break;
-                case 5:
+                case 6:
                     return;
                 default:
                     System.out.println("Invalid choice. Please try again.");
@@ -65,10 +73,13 @@ public class Main {
         WalletController walletController = new WalletController(walletService, validateService); // Initialize walletController
         IBudgetService budgetService = BudgetService.getInstance(); // Initialize budgetService to manage budget-related functions
         BudgetController budgetController = new BudgetController(budgetService, validateService); // Initialize budgetController
-        ITransactionService transactionService = TransactionService.getInstance(); // Initialize transactionService to manage transaction-related functions
+        ITransactionService transactionService = TransactionService.getInstance(walletService, budgetService); // Initialize transactionService to manage transaction-related functions
         TransactionController transactionController = new TransactionController(transactionService, validateService); // Initialize transactionController
         IFinancialGoalService financialGoalService = FinancialGoalService.getInstance(); // Initialize financialGoalService to manage financial goal-related functions
-        FinancialGoalController financialGoalController = new FinancialGoalController(financialGoalService, validateService); // Initialize financialGoalController
+        FinancialGoalController financialGoalController = new FinancialGoalController(financialGoalService, validateService, walletService); // Initialize financialGoalController
+        IExpenseTargetService expenseTargetService = ExpenseTargetService.getInstance(); // Initialize expenseTargetService to manage expense target-related functions
+        ExpenseTargetController expenseTargetController = new ExpenseTargetController(expenseTargetService, validateService); // Initialize expenseTargetController
+
         User currentUser = new User();
 
         ArrayList<User> users = userController.loadUser();
@@ -84,13 +95,13 @@ public class Main {
 
             switch (option) {
                 case 1:
-                    userController.register(users); // Call the register method from userController
+                    userController.register(users);
                     break;
                 case 2:
                     User user = userController.login(users); // Call the login method from userController and save the current user if login is successful
                     if (user != null) {
                         currentUser = user;
-                        showPostLoginMenu(validateService, currentUser, walletController, budgetController, transactionController, financialGoalController);
+                        showPostLoginMenu(validateService, currentUser, walletController, budgetController, transactionController, financialGoalController, expenseTargetController);
                     }
                     break;
                 case 3:

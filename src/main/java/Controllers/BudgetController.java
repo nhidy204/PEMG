@@ -21,7 +21,7 @@ public class BudgetController {
         this.budgets = budgetService.loadBudgets();
     }
 
-    public void showBudgetMenu() {
+    public void showBudgetMenu(String userId) {
         while (true) {
             System.out.println("Menu for you:");
             System.out.println("1. Add Budget");
@@ -32,18 +32,22 @@ public class BudgetController {
 
             int choice = validateService.inputInt("Choose an option: ", 1, 5);
 
+            // Luôn tải lại dữ liệu từ file
+            budgets.clear();
+            budgets.addAll(budgetService.loadBudgets());
+
             switch (choice) {
                 case 1:
-                    addBudget();
+                    addBudget(userId);
                     break;
                 case 2:
-                    listBudgets();
+                    listBudgets(userId);
                     break;
                 case 3:
-                    editBudget();
+                    editBudget(userId);
                     break;
                 case 4:
-                    deleteBudget();
+                    deleteBudget(userId);
                     break;
                 case 5:
                     return;
@@ -53,35 +57,40 @@ public class BudgetController {
         }
     }
 
-    private void addBudget() {
-        String userId = validateService.inputString("Enter user ID: ", null);
-        String expenseTargetId = validateService.inputString("Enter expense target ID: ", null);
-        double maximumAmount = validateService.inputDouble("Enter maximum amount: ");
-        String budgetName = validateService.inputString("Enter budget name: ", null);
 
-        Budget budget = new Budget(UUID.randomUUID().toString(), userId, expenseTargetId, maximumAmount, budgetName, LocalDateTime.now().toString(), LocalDateTime.now().toString());
+    private void addBudget(String userId) {
+        String budgetName = validateService.inputString("Enter budget name: ", null);
+        double maximumAmount = validateService.inputDouble("Enter maximum amount: ");
+        String expenseTargetId = validateService.inputString("Enter expense target ID: ", null);
+
+        Budget budget = new Budget(UUID.randomUUID().toString(), budgetName, maximumAmount, expenseTargetId, LocalDateTime.now().toString(), LocalDateTime.now().toString(), userId);
         budgetService.addBudget(budget, budgets);
         saveBudgets();
     }
 
-    private void listBudgets() {
-        ArrayList<Budget> budgetList = budgetService.listBudgets(budgets);
-        for (Budget budget : budgetList) {
-            System.out.println("Budget Name: " + budget.getBudgetName() + ", Maximum Amount: " + budget.getMaximumAmount() + ", ID: " + budget.getId());
+    private void listBudgets(String userId) {
+        ArrayList<Budget> budgetList = budgetService.listBudgets(userId, budgets);
+        if (budgetList.isEmpty()) {
+            System.out.println("No budgets found for this user.");
+        } else {
+            for (Budget budget : budgetList) {
+                System.out.println("Budget Name: " + budget.getBudgetName() + ", Maximum Amount: " + budget.getMaximumAmount() + ", Expense Target ID: " + budget.getExpenseTargetId() + ", ID: " + budget.getId());
+            }
         }
     }
 
-    private void editBudget() {
+    private void editBudget(String userId) {
         String id = validateService.inputString("Enter budget ID to edit: ", null);
         String budgetName = validateService.inputString("Enter new budget name: ", null);
         double maximumAmount = validateService.inputDouble("Enter new maximum amount: ");
+        String expenseTargetId = validateService.inputString("Enter new expense target ID: ", null);
 
-        Budget updatedBudget = new Budget(id, null, null, maximumAmount, budgetName, LocalDateTime.now().toString(), LocalDateTime.now().toString());
+        Budget updatedBudget = new Budget(id, budgetName, maximumAmount, expenseTargetId, LocalDateTime.now().toString(), LocalDateTime.now().toString(), userId);
         budgetService.editBudget(id, updatedBudget, budgets);
         saveBudgets();
     }
 
-    private void deleteBudget() {
+    private void deleteBudget(String userId) {
         String id = validateService.inputString("Enter budget ID to delete: ", null);
         budgetService.deleteBudget(id, budgets);
         saveBudgets();

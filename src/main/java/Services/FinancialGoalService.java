@@ -2,7 +2,6 @@ package Services;
 
 import Constants.FileConstants;
 import Models.FinancialGoal;
-import Models.Wallet;
 import Services.Interfaces.IFinancialGoalService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -37,17 +36,25 @@ public class FinancialGoalService implements IFinancialGoalService {
     }
 
     @Override
-    public ArrayList<FinancialGoal> listFinancialGoals(ArrayList<FinancialGoal> financialGoals) {
-        return financialGoals;
+    public ArrayList<FinancialGoal> listFinancialGoals(String userId, ArrayList<FinancialGoal> financialGoals) {
+        ArrayList<FinancialGoal> userFinancialGoals = new ArrayList<>();
+        for (FinancialGoal financialGoal : financialGoals) {
+            if (financialGoal.getUserId() != null && financialGoal.getUserId().equals(userId)) {
+                userFinancialGoals.add(financialGoal);
+            }
+        }
+        return userFinancialGoals;
     }
 
     @Override
     public void editFinancialGoal(String financialGoalId, FinancialGoal updatedFinancialGoal, ArrayList<FinancialGoal> financialGoals) {
         for (FinancialGoal financialGoal : financialGoals) {
-            if (financialGoal.getId().equals(financialGoalId)) {
-                financialGoal.setTargetAmount(updatedFinancialGoal.getTargetAmount());
-                financialGoal.setName(updatedFinancialGoal.getName());
+            String id = financialGoal.getId();
+            if (id.equals(financialGoalId)) {
+                financialGoal.setGoalName(updatedFinancialGoal.getGoalName());
+                financialGoal.setGoalTarget(updatedFinancialGoal.getGoalTarget());
                 financialGoal.setUpdatedAt(updatedFinancialGoal.getUpdatedAt());
+                financialGoal.setUserId(updatedFinancialGoal.getUserId());
                 saveFinancialGoals(financialGoals);
                 System.out.println("Financial goal updated successfully.");
                 return;
@@ -87,25 +94,15 @@ public class FinancialGoalService implements IFinancialGoalService {
     }
 
     @Override
-    public FinancialGoal getFinancialGoalById(String financialGoalId) {
-        ArrayList<FinancialGoal> financialGoals = loadFinancialGoals();
+    public void checkGoalProgress(String userId, double walletBalance, ArrayList<FinancialGoal> financialGoals) {
         for (FinancialGoal financialGoal : financialGoals) {
-            if (financialGoal.getId().equals(financialGoalId)) {
-                return financialGoal;
+            if (financialGoal.getUserId().equals(userId)) {
+                double progress = (walletBalance / financialGoal.getGoalTarget()) * 100;
+                System.out.println("Progress for goal '" + financialGoal.getGoalName() + "': " + progress + "%");
+                if (walletBalance >= financialGoal.getGoalTarget()) {
+                    System.out.println("Congratulations! You have achieved your goal: " + financialGoal.getGoalName());
+                }
             }
         }
-        return null;
-    }
-
-    @Override
-    public double getWalletBalanceByUserId(String userId) {
-        WalletService walletService = WalletService.getInstance();
-        ArrayList<Wallet> wallets = walletService.loadWallets();
-        for (Wallet wallet : wallets) {
-            if (wallet.getUserId().equals(userId)) {
-                return wallet.getBalance();
-            }
-        }
-        return 0;
     }
 }

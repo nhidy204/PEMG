@@ -4,22 +4,24 @@ import java.util.UUID;
 
 public class FinancialGoal {
     public String id; //id financial
-    public String userId; // userid
-    public String name;  //ten goal
-    public double targetAmount;  //so tien da dat duoc
-    public String createdAt; //thoi gian tao goal
-    public String updatedAt; //thoi gian sua goal
+    public String goalName;
+    public double goalTarget;
+    public String createdAt;
+    public String updatedAt;
+    public String userId;
+
+
 
     public FinancialGoal() {
     }
 
-    public FinancialGoal(String id, String userId, String name, double targetAmount, String createdAt, String updatedAt) {
+    public FinancialGoal(String id, String goalName, double goalTarget, String createdAt, String updatedAt, String userId) {
         this.id = UUID.randomUUID().toString();
+        this.goalName = goalName;
+        this.goalTarget = goalTarget;
+        this.createdAt = LocalDateTime.now().toString();;
+        this.updatedAt = LocalDateTime.now().toString();;
         this.userId = userId;
-        this.name = name;
-        this.targetAmount = targetAmount;
-        this.createdAt = LocalDateTime.now().toString();
-        this.updatedAt = LocalDateTime.now().toString();
     }
 
     public String getId() {
@@ -30,28 +32,20 @@ public class FinancialGoal {
         this.id = id;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getGoalName() {
+        return goalName;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setGoalName(String goalName) {
+        this.goalName = goalName;
     }
 
-    public String getName() {
-        return name;
+    public double getGoalTarget() {
+        return goalTarget;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public double getTargetAmount() {
-        return targetAmount;
-    }
-
-    public void setTargetAmount(double targetAmount) {
-        this.targetAmount = targetAmount;
+    public void setGoalTarget(double goalTarget) {
+        this.goalTarget = goalTarget;
     }
 
     public String getCreatedAt() {
@@ -69,5 +63,12 @@ public class FinancialGoal {
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
-}
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+}
