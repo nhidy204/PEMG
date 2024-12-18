@@ -1,6 +1,5 @@
 package Services;
 
-
 import Constants.FileConstants;
 import Models.User;
 import Services.Interfaces.IUserService;
@@ -14,17 +13,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-
 
 public class UserService implements IUserService {
     public static UserService instance;
     private final String FILE_PATH = FileConstants.ROOT_PATH + "/" + FileConstants.USER_FILE_NAME;
 
-
-    public UserService() {
-    }
-
+    public UserService() {}
 
     public static UserService getInstance() {
         if (instance == null) {
@@ -32,7 +26,6 @@ public class UserService implements IUserService {
         }
         return instance;
     }
-
 
     @Override
     public User registerUser(String username, String password, ArrayList<User> users) {
@@ -45,7 +38,6 @@ public class UserService implements IUserService {
         User newUser = new User(username, password);
         users.add(newUser);
 
-
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (FileWriter writer = new FileWriter(FILE_PATH)) {
             gson.toJson(users, writer);
@@ -54,7 +46,6 @@ public class UserService implements IUserService {
         }
         return newUser;
     }
-
 
     @Override
     public User loginUser(String username, String password, ArrayList<User> users) {
@@ -68,12 +59,10 @@ public class UserService implements IUserService {
         return null;
     }
 
-
     @Override
     public double getUserBalance() {
         return 0;
     }
-
 
     @Override
     public void viewReports() {
@@ -95,20 +84,18 @@ public class UserService implements IUserService {
             char[] buffer = new char[1024]; // khai bao 1 mang ky tu buffer co kich thuoc = 1024
             int charsRead; //doc tung ky tu duoc luu
 
-
             while ((charsRead = reader.read(buffer)) != -1) { //doc
                 contentBuilder.append(buffer, 0, charsRead);
             }
             String content = contentBuilder.toString().trim();
             if (content.isEmpty()) {
                 System.out.println("File is empty.");
-
-                return null;
+                return new ArrayList<>();
             }
 
             if (!content.startsWith("[") || !content.endsWith("]")) {
                 System.out.println("Invalid JSON format. Starting with an empty list.");
-                return null;
+                return new ArrayList<>();
             }
 
             User[] userArray = gson.fromJson(content, User[].class);
@@ -118,43 +105,19 @@ public class UserService implements IUserService {
                 System.out.println("Loaded users: " + users.size());
                 return users;
             } else {
-
                 System.out.println("No valid user data found in the file.");
-                return null;
+                return new ArrayList<>();
             }
-
 
         } catch (FileNotFoundException e) {
             System.out.println("No users file found at " + FILE_PATH + ", starting with an empty list.");
-            return null;
+            return new ArrayList<>();
         } catch (IOException e) {
             System.out.println("Error reading from file: " + e.getMessage());
-            return null;
+            return new ArrayList<>();
         } catch (JsonSyntaxException e) {
             System.out.println("JSON syntax error: " + e.getMessage());
-            return null;
+            return new ArrayList<>();
         }
     }
-
-//    public void saveUserToFile(User user) {
-//        Gson gson = new Gson();
-//        try (FileWriter writer = new FileWriter("users.json", false)) {
-//            gson.toJson(user, writer); // Lưu thông tin người dùng vào file JSON
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public User loadUserFromFile(String username) {
-//        Gson gson = new Gson();
-//        try (FileReader reader = new FileReader("users.json")) {
-//            User user = gson.fromJson(reader, User.class); // Đọc và trả về đối tượng User từ file JSON
-//            return user;
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
-//
-
 }

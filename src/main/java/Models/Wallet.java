@@ -11,7 +11,7 @@ public class Wallet {
     private String userId;
     private String name;
 
-    public Wallet() {
+    public Wallet(String string, String name, double balance, String s, String userId, String id) {
     }
 
     public Wallet(String id, String createdAt, String updatedAt, double balance, String userId, String name) {

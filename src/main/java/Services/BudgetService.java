@@ -2,7 +2,9 @@ package Services;
 
 import Constants.FileConstants;
 import Models.Budget;
+import Models.Wallet;
 import Services.Interfaces.IBudgetService;
+import Services.Interfaces.IWalletService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
@@ -18,18 +20,39 @@ public class BudgetService implements IBudgetService {
     private static BudgetService instance;
     private final String FILE_PATH = FileConstants.ROOT_PATH + "/" + FileConstants.BUDGET_FILE_NAME;
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private final IWalletService walletService;
 
-    private BudgetService() {}
+    private BudgetService(IWalletService walletService) {
+        this.walletService = walletService;
+    }
 
-    public static BudgetService getInstance() {
+    public static BudgetService getInstance(IWalletService walletService) {
         if (instance == null) {
-            instance = new BudgetService();
+            instance = new BudgetService(walletService);
         }
         return instance;
     }
 
     @Override
     public void addBudget(Budget budget, ArrayList<Budget> budgets) {
+        Wallet wallet = walletService.getWalletByUserId(budget.getUserId());
+        if (wallet == null) {
+            System.out.println("No wallet found for this user. Cannot create budget.");
+            return;
+        }
+
+        double remainingBalance = wallet.getBalance();
+        for (Budget b : budgets) {
+            if (b.getUserId().equals(budget.getUserId())) {
+                remainingBalance -= b.getMaximumAmount();
+            }
+        }
+
+        if (budget.getMaximumAmount() > remainingBalance) {
+            System.out.println("Cannot create budget. Amount exceeds remaining wallet balance.");
+            return;
+        }
+
         budgets.add(budget);
         saveBudgets(budgets);
         System.out.println("Budget added successfully.");
@@ -93,16 +116,5 @@ public class BudgetService implements IBudgetService {
             e.printStackTrace();
             return new ArrayList<>();
         }
-    }
-
-    @Override
-    public Budget getBudgetByExpenseTargetId(String expenseTargetId) {
-        ArrayList<Budget> budgets = loadBudgets();
-        for (Budget budget : budgets) {
-            if (budget.getExpenseTargetId().equals(expenseTargetId)) {
-                return budget;
-            }
-        }
-        return null;
     }
 }

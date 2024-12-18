@@ -32,10 +32,6 @@ public class BudgetController {
 
             int choice = validateService.inputInt("Choose an option: ", 1, 5);
 
-            // Luôn tải lại dữ liệu từ file
-            budgets.clear();
-            budgets.addAll(budgetService.loadBudgets());
-
             switch (choice) {
                 case 1:
                     addBudget(userId);
@@ -57,35 +53,25 @@ public class BudgetController {
         }
     }
 
-
     private void addBudget(String userId) {
         String budgetName = validateService.inputString("Enter budget name: ", null);
         double maximumAmount = validateService.inputDouble("Enter maximum amount: ");
-        String expenseTargetId = validateService.inputString("Enter expense target ID: ", null);
 
-        Budget budget = new Budget(UUID.randomUUID().toString(), budgetName, maximumAmount, expenseTargetId, LocalDateTime.now().toString(), LocalDateTime.now().toString(), userId);
+        Budget budget = new Budget(UUID.randomUUID().toString(), budgetName, maximumAmount, LocalDateTime.now().toString(), LocalDateTime.now().toString(), userId);
         budgetService.addBudget(budget, budgets);
         saveBudgets();
     }
 
-    private void listBudgets(String userId) {
-        ArrayList<Budget> budgetList = budgetService.listBudgets(userId, budgets);
-        if (budgetList.isEmpty()) {
-            System.out.println("No budgets found for this user.");
-        } else {
-            for (Budget budget : budgetList) {
-                System.out.println("Budget Name: " + budget.getBudgetName() + ", Maximum Amount: " + budget.getMaximumAmount() + ", Expense Target ID: " + budget.getExpenseTargetId() + ", ID: " + budget.getId());
-            }
-        }
+    public ArrayList<Budget> listBudgets(String userId) {
+        return budgetService.listBudgets(userId, budgets);
     }
 
     private void editBudget(String userId) {
         String id = validateService.inputString("Enter budget ID to edit: ", null);
         String budgetName = validateService.inputString("Enter new budget name: ", null);
         double maximumAmount = validateService.inputDouble("Enter new maximum amount: ");
-        String expenseTargetId = validateService.inputString("Enter new expense target ID: ", null);
 
-        Budget updatedBudget = new Budget(id, budgetName, maximumAmount, expenseTargetId, LocalDateTime.now().toString(), LocalDateTime.now().toString(), userId);
+        Budget updatedBudget = new Budget(id, budgetName, maximumAmount, LocalDateTime.now().toString(), LocalDateTime.now().toString(), userId);
         budgetService.editBudget(id, updatedBudget, budgets);
         saveBudgets();
     }

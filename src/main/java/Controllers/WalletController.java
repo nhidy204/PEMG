@@ -101,4 +101,7 @@ public class WalletController {
     private void saveWallets() {
         walletService.saveWallets(wallets);
     }
+    public Wallet getWalletByUserId(String userId) {
+        return walletService.getWalletByUserId(userId);
+    }
 }

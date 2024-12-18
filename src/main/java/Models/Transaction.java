@@ -4,32 +4,29 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Transaction {
-
     public String id;
     public String type;
     public double amount;
     public String category;
-    public String expenseTargetId;
+    public String categoryId;
     public String createdAt;
     public String updatedAt;
     public String name;
     public String userId;
 
-    public Transaction() {
-    }
-
-    public Transaction(String id, String type, double amount, String category, String expenseTargetId, String createdAt, String updatedAt, String name,String userId) {
+    public Transaction(String id, String type, double amount, String category, String categoryId, String createdAt, String updatedAt, String name, String userId) {
         this.id = UUID.randomUUID().toString();
         this.type = type;
         this.amount = amount;
         this.category = category;
-        this.expenseTargetId = expenseTargetId;
-        this.createdAt = LocalDateTime.now().toString();;
-        this.updatedAt = LocalDateTime.now().toString();;
+        this.categoryId = categoryId;
+        this.createdAt = LocalDateTime.now().toString();
+        this.updatedAt = LocalDateTime.now().toString();
         this.name = name;
         this.userId = userId;
     }
 
+    // Getters and setters
     public String getId() {
         return id;
     }
@@ -62,12 +59,12 @@ public class Transaction {
         this.category = category;
     }
 
-    public String getExpenseTargetId() {
-        return expenseTargetId;
+    public String getCategoryId() {
+        return categoryId;
     }
 
-    public void setExpenseTargetId(String expenseTargetId) {
-        this.expenseTargetId = expenseTargetId;
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getCreatedAt() {

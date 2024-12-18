@@ -19,8 +19,8 @@ public class FinancialGoal {
         this.id = UUID.randomUUID().toString();
         this.goalName = goalName;
         this.goalTarget = goalTarget;
-        this.createdAt = LocalDateTime.now().toString();;
-        this.updatedAt = LocalDateTime.now().toString();;
+        this.createdAt = LocalDateTime.now().toString();
+        this.updatedAt = LocalDateTime.now().toString();
         this.userId = userId;
     }
 

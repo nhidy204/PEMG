@@ -8,7 +8,6 @@ public class FileConstants {
     public static final String BUDGET_FILE_NAME = "budgets.json";
     public static final String TRANSACTION_FILE_NAME = "transactions.json";
     public static final String FINANCIAL_GOAL_FILE_NAME = "financialGoals.json";
-    public static final String EXPENSE_TARGET_FILE_NAME = "expenses.json";
    //TUONG TU CHO CAC MODEL KHAC
 }
 

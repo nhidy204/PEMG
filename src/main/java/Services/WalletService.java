@@ -44,7 +44,7 @@ public class WalletService implements IWalletService {
     public Wallet getWalletByUserId(String userId) {
         ArrayList<Wallet> wallets = loadWallets();
         for (Wallet wallet : wallets) {
-            if (wallet.getUserId().equals(userId)) {
+            if (wallet.getUserId() != null && wallet.getUserId().equals(userId)) {
                 return wallet;
             }
         }

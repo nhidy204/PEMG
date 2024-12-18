@@ -41,46 +41,56 @@ public class TransactionService implements ITransactionService {
     public void addTransaction(Transaction transaction, ArrayList<Transaction> transactions) {
         Wallet wallet = walletService.getWalletByUserId(transaction.getUserId());
         if (wallet == null) {
-            System.out.println("Wallet not found for user ID: " + transaction.getUserId());
+            System.out.println("No wallet found for this user. Cannot create transaction.");
+            return;
+        }
+
+        ArrayList<Wallet> wallets = walletService.loadWallets();
+        ArrayList<Budget> budgets = budgetService.loadBudgets();
+        Budget selectedBudget = null;
+
+        for (Budget budget : budgets) {
+            if (budget.getId().equals(transaction.getCategoryId()) && budget.getUserId().equals(transaction.getUserId())) {
+                selectedBudget = budget;
+                break;
+            }
+        }
+
+        if (selectedBudget == null) {
+            System.out.println("No matching budget found for this user. Cannot create transaction.");
             return;
         }
 
         if (transaction.getType().equals("income")) {
-            double newBalance = wallet.getBalance() + transaction.getAmount();
-            ArrayList<Wallet> currentWallets = walletService.loadWallets();
-            for (Wallet currentWallet : currentWallets) {
-                if (wallet.getId().equals(currentWallet.getId())) {
-                    currentWallet.setBalance(newBalance);
-                    break;
-                }
-            }
-            walletService.saveWallets(currentWallets);
+            wallet.setBalance(wallet.getBalance() + transaction.getAmount());
+            selectedBudget.setMaximumAmount(selectedBudget.getMaximumAmount() + transaction.getAmount());
         } else if (transaction.getType().equals("expense")) {
-            Budget budget = budgetService.getBudgetByExpenseTargetId(transaction.getExpenseTargetId());
-            if (budget != null) {
-                ArrayList<Transaction> userTransactions = listTransactions(transaction.getUserId(), transactions);
-                double totalExpense = transaction.getAmount();
-                for (Transaction t : userTransactions) {
-                    if (t.getExpenseTargetId() != null && t.getExpenseTargetId().equals(transaction.getExpenseTargetId())) {
-                        totalExpense += t.getAmount();
-                    }
-                }
-                if (totalExpense > budget.getMaximumAmount()) {
-                    System.out.println("Transaction exceeds budget limit. Cannot create transaction.");
-                    return;
-                } else {
-                    double newBalance = wallet.getBalance() - transaction.getAmount();
-                    ArrayList<Wallet> currentWallets = walletService.loadWallets();
-                    for (Wallet currentWallet : currentWallets) {
-                        if (wallet.getId().equals(currentWallet.getId())) {
-                            currentWallet.setBalance(newBalance);
-                            break;
-                        }
-                    }
-                    walletService.saveWallets(currentWallets);
-                }
+            if (transaction.getAmount() > wallet.getBalance() || transaction.getAmount() > selectedBudget.getMaximumAmount()) {
+                System.out.println("Transaction exceeds wallet or budget balance. Cannot create transaction.");
+                return;
+            } else {
+                wallet.setBalance(wallet.getBalance() - transaction.getAmount());
+                selectedBudget.setMaximumAmount(selectedBudget.getMaximumAmount() - transaction.getAmount());
             }
         }
+
+        for (int i = 0; i < wallets.size(); i++) {
+            if (wallets.get(i).getId().equals(wallet.getId())) {
+                wallets.set(i, wallet);
+                break;
+            }
+        }
+
+        for (int i = 0; i < budgets.size(); i++) {
+            if (budgets.get(i).getId().equals(selectedBudget.getId())) {
+                budgets.set(i, selectedBudget);
+                break;
+            }
+        }
+
+        walletService.saveWallets(wallets);
+        budgetService.saveBudgets(budgets);
+
         transactions.add(transaction);
         saveTransactions(transactions);
         System.out.println("Transaction added successfully.");
@@ -99,15 +109,73 @@ public class TransactionService implements ITransactionService {
 
     @Override
     public void editTransaction(String transactionId, Transaction updatedTransaction, ArrayList<Transaction> transactions) {
+        Wallet wallet = walletService.getWalletByUserId(updatedTransaction.getUserId());
+        ArrayList<Wallet> wallets = walletService.loadWallets();
+        ArrayList<Budget> budgets = budgetService.loadBudgets();
+        Budget selectedBudget = null;
+
+        for (Budget budget : budgets) {
+            if (budget.getId().equals(updatedTransaction.getCategoryId()) && budget.getUserId().equals(updatedTransaction.getUserId())) {
+                selectedBudget = budget;
+                break;
+            }
+        }
+
+        if (wallet == null || selectedBudget == null) {
+            System.out.println("No wallet or budget found for this user. Cannot edit transaction.");
+            return;
+        }
+
         for (Transaction transaction : transactions) {
             if (transaction.getId().equals(transactionId)) {
+                // Revert wallet and budget changes from the original transaction
+                if (transaction.getType().equals("income")) {
+                    wallet.setBalance(wallet.getBalance() - transaction.getAmount());
+                    selectedBudget.setMaximumAmount(selectedBudget.getMaximumAmount() - transaction.getAmount());
+                } else if (transaction.getType().equals("expense")) {
+                    wallet.setBalance(wallet.getBalance() + transaction.getAmount());
+                    selectedBudget.setMaximumAmount(selectedBudget.getMaximumAmount() + transaction.getAmount());
+                }
+
+                // Apply wallet and budget changes from the updated transaction
+                if (updatedTransaction.getType().equals("income")) {
+                    wallet.setBalance(wallet.getBalance() + updatedTransaction.getAmount());
+                    selectedBudget.setMaximumAmount(selectedBudget.getMaximumAmount() + updatedTransaction.getAmount());
+                } else if (updatedTransaction.getType().equals("expense")) {
+                    if (updatedTransaction.getAmount() > wallet.getBalance() || updatedTransaction.getAmount() > selectedBudget.getMaximumAmount()) {
+                        System.out.println("Transaction exceeds wallet or budget balance. Cannot edit transaction.");
+                        return;
+                    } else {
+                        wallet.setBalance(wallet.getBalance() - updatedTransaction.getAmount());
+                        selectedBudget.setMaximumAmount(selectedBudget.getMaximumAmount() - updatedTransaction.getAmount());
+                    }
+                }
+
                 transaction.setType(updatedTransaction.getType());
                 transaction.setAmount(updatedTransaction.getAmount());
                 transaction.setCategory(updatedTransaction.getCategory());
-                transaction.setExpenseTargetId(updatedTransaction.getExpenseTargetId());
                 transaction.setName(updatedTransaction.getName());
                 transaction.setUpdatedAt(updatedTransaction.getUpdatedAt());
                 saveTransactions(transactions);
+
+                // Update the wallet and budget in the list
+                for (int i = 0; i < wallets.size(); i++) {
+                    if (wallets.get(i).getId().equals(wallet.getId())) {
+                        wallets.set(i, wallet);
+                        break;
+                    }
+                }
+
+                for (int i = 0; i < budgets.size(); i++) {
+                    if (budgets.get(i).getId().equals(selectedBudget.getId())) {
+                        budgets.set(i, selectedBudget);
+                        break;
+                    }
+                }
+
+                walletService.saveWallets(wallets);
+                budgetService.saveBudgets(budgets);
+
                 System.out.println("Transaction updated successfully.");
                 return;
             }
@@ -117,8 +185,62 @@ public class TransactionService implements ITransactionService {
 
     @Override
     public void deleteTransaction(String transactionId, ArrayList<Transaction> transactions) {
-        transactions.removeIf(transaction -> transaction.getId().equals(transactionId));
+        Wallet wallet = null;
+        Budget selectedBudget = null;
+        Transaction deletedTransaction = null;
+
+        for (Transaction transaction : transactions) {
+            if (transaction.getId().equals(transactionId)) {
+                wallet = walletService.getWalletByUserId(transaction.getUserId());
+                ArrayList<Budget> budgets = budgetService.loadBudgets();
+                for (Budget budget : budgets) {
+                    if (budget.getId().equals(transaction.getCategoryId()) && budget.getUserId().equals(transaction.getUserId())) {
+                        selectedBudget = budget;
+                        break;
+                    }
+                }
+                deletedTransaction = transaction;
+                break;
+            }
+        }
+
+        if (wallet == null || selectedBudget == null || deletedTransaction == null) {
+            System.out.println("No wallet, budget, or transaction found. Cannot delete transaction.");
+            return;
+        }
+
+        // Revert wallet and budget changes from the deleted transaction
+        if (deletedTransaction.getType().equals("income")) {
+            wallet.setBalance(wallet.getBalance() - deletedTransaction.getAmount());
+            selectedBudget.setMaximumAmount(selectedBudget.getMaximumAmount() - deletedTransaction.getAmount());
+        } else if (deletedTransaction.getType().equals("expense")) {
+            wallet.setBalance(wallet.getBalance() + deletedTransaction.getAmount());
+            selectedBudget.setMaximumAmount(selectedBudget.getMaximumAmount() + deletedTransaction.getAmount());
+        }
+
+        transactions.remove(deletedTransaction);
         saveTransactions(transactions);
+
+        // Update the wallet and budget in the list
+        ArrayList<Wallet> wallets = walletService.loadWallets();
+        for (int i = 0; i < wallets.size(); i++) {
+            if (wallets.get(i).getId().equals(wallet.getId())) {
+                wallets.set(i, wallet);
+                break;
+            }
+        }
+
+        ArrayList<Budget> budgets = budgetService.loadBudgets();
+        for (int i = 0; i < budgets.size(); i++) {
+            if (budgets.get(i).getId().equals(selectedBudget.getId())) {
+                budgets.set(i, selectedBudget);
+                break;
+            }
+        }
+
+        walletService.saveWallets(wallets);
+        budgetService.saveBudgets(budgets);
+
         System.out.println("Transaction deleted successfully.");
     }
 

@@ -6,7 +6,6 @@ public class Budget {
     public String id;
     public String budgetName;
     public double maximumAmount;
-    public String expenseTargetId;
     public String createdAt;
     public String updatedAt;
     public String userId;
@@ -14,11 +13,10 @@ public class Budget {
     public Budget() {
     }
 
-    public Budget(String id, String budgetName, double maximumAmount, String expenseTargetId, String createdAt, String updatedAt, String userId) {
+    public Budget(String id, String budgetName, double maximumAmount, String createdAt, String updatedAt, String userId) {
         this.id = UUID.randomUUID().toString();
         this.budgetName = budgetName;
         this.maximumAmount = maximumAmount;
-        this.expenseTargetId = expenseTargetId;
         this.createdAt = LocalDateTime.now().toString();;
         this.updatedAt = LocalDateTime.now().toString();;
         this.userId = userId;
@@ -46,14 +44,6 @@ public class Budget {
 
     public void setMaximumAmount(double maximumAmount) {
         this.maximumAmount = maximumAmount;
-    }
-
-    public String getExpenseTargetId() {
-        return expenseTargetId;
-    }
-
-    public void setExpenseTargetId(String expenseTargetId) {
-        this.expenseTargetId = expenseTargetId;
     }
 
     public String getCreatedAt() {
