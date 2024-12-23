@@ -67,9 +67,12 @@ public class WalletController {
     }
 
     private void viewWallet(String userId) {
+        int id = 1;
         Wallet wallet = walletService.getWalletByUserId(userId);
         if (wallet != null) {
-            System.out.println("Wallet Name: " + wallet.getName() + ", Balance: " + wallet.getBalance() + ", ID: " + wallet.getId());
+            System.out.printf("%-10s %-20s %-20s %-12s\n", "No.", "Name", "Balance", "Wallet ID");
+            System.out.printf("%-10s %-20s %-20s %-12s\n", id, wallet.getName(), wallet.getBalance(), wallet.getId());
+            id++;
         } else {
             System.out.println("No wallet found for this user.");
         }
