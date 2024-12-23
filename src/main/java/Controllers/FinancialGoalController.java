@@ -71,11 +71,14 @@ public class FinancialGoalController {
 
     private void listFinancialGoals(String userId) {
         ArrayList<FinancialGoal> financialGoalList = financialGoalService.listFinancialGoals(userId, financialGoals);
+        int id = 1;
         if (financialGoalList.isEmpty()) {
             System.out.println("No financial goals found for this user.");
         } else {
             for (FinancialGoal financialGoal : financialGoalList) {
-                System.out.println("Financial Goal Name: " + financialGoal.getGoalName() + ", Goal Target: " + financialGoal.getGoalTarget() + ", ID: " + financialGoal.getId());
+                System.out.printf("%-10s %-20s %-20s %-12s\n", "No.", "Name", "Goal Target", "Financial Goal ID");
+                System.out.printf("%-10s %-20s %-20s %-12s\n", id, financialGoal.getGoalName(), financialGoal.getGoalTarget(), financialGoal.getId());
+                id++;
             }
         }
     }

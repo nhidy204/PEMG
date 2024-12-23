@@ -98,11 +98,26 @@ public class FinancialGoalService implements IFinancialGoalService {
         for (FinancialGoal financialGoal : financialGoals) {
             if (financialGoal.getUserId().equals(userId)) {
                 double progress = (walletBalance / financialGoal.getGoalTarget()) * 100;
-                System.out.println("Progress for goal '" + financialGoal.getGoalName() + "': " + progress + "%");
-                if (walletBalance >= financialGoal.getGoalTarget()) {
+                if (progress > 100) {
+                    progress = 100;
+                }
+
+                int progressBarLength = 20; // Length of the progress bar
+                int progressHashes = (int) (progress / 100 * progressBarLength);
+                StringBuilder progressBar = new StringBuilder();
+                for (int i = 0; i < progressHashes; i++) {
+                    progressBar.append("#");
+                }
+                for (int i = progressHashes; i < progressBarLength; i++) {
+                    progressBar.append("-");
+                }
+
+                System.out.println("Progress for goal '" + financialGoal.getGoalName() + "': " + String.format("%.2f", progress) + "% [" + progressBar + "]");
+                if (progress == 100) {
                     System.out.println("Congratulations! You have achieved your goal: " + financialGoal.getGoalName());
                 }
             }
         }
     }
+
 }

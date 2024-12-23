@@ -14,6 +14,9 @@ public class Transaction {
     public String name;
     public String userId;
 
+    public Transaction() {
+    }
+
     public Transaction(String id, String type, double amount, String category, String categoryId, String createdAt, String updatedAt, String name, String userId) {
         this.id = UUID.randomUUID().toString();
         this.type = type;

@@ -63,6 +63,18 @@ public class BudgetController {
     }
 
     public ArrayList<Budget> listBudgets(String userId) {
+        ArrayList<Budget> userBudgets = budgetService.listBudgets(userId, budgets);
+        int id = 1;
+        if (userBudgets.isEmpty()) {
+            System.out.println("No budgets found for this user.");
+        } else {
+            for (Budget budget : userBudgets) {
+                System.out.printf("%-10s %-20s %-20s %-12s\n", "No.", "Name", "Max Amount", "Budget ID");
+                System.out.printf("%-10s %-20s %-20s %-12s\n", id, budget.getBudgetName(), budget.getMaximumAmount(), budget.getId());
+                id++;
+            }
+            
+        }
         return budgetService.listBudgets(userId, budgets);
     }
 

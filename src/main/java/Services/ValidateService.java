@@ -52,7 +52,7 @@ public class ValidateService implements IValidateService {
             try {
                 double number = Double.parseDouble(input);
                 double min = 1;
-                double max = 1000;
+                double max = 1000000000;
                 if (number < min || number > max) {
                     System.out.print("Please input between " + min + ", " + max + ": ");
                     continue;
