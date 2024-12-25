@@ -7,11 +7,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Scanner;
 
-public class ValidateService implements IValidateService {
-    private static ValidateService instance;
-    private ValidateService() {
-    }
 
+// validateService dung de chua cac phuong thuc de kiem tra va xac thuc du lieu input tu user (lop singleton, chi ton tai 1 ínstance duy nhat
+public class ValidateService implements IValidateService {
+    public static ValidateService instance; //instance duy nhat
+
+    public ValidateService() {
+    } //constructor mac dinh
+
+    //getInstance su dung singleton de dam bao only instance, neu instance chua dc khoi tao -> tao ra 1 instance ms
+    //Nếu instance chưa được khởi tạo, nó sẽ tạo một instance mới.
     public static ValidateService getInstance() {
         if (instance == null) {
             instance = new ValidateService();
@@ -19,11 +24,11 @@ public class ValidateService implements IValidateService {
         return instance;
     }
 
-    private Scanner sc = new Scanner(System.in);
+    public Scanner sc = new Scanner(System.in);
 
-    public int inputInt(String mess, int min, int max) {
+    public int inputInt(String mess, int min, int max) { //inputInt nhan dau vao la 1 so nguyen trong khoang min max
         System.out.print(mess);
-        while(true) {
+        while (true) {
             String input = sc.nextLine();
             try {
                 int number = Integer.parseInt(input);
@@ -39,17 +44,15 @@ public class ValidateService implements IValidateService {
         }
     }
 
-    public double inputDouble(String mess, double min, double max) {
+    public double inputDouble(String mess) {
         System.out.print(mess);
 
-        while(true) {
+        while (true) {
             String input = sc.nextLine();
             try {
                 double number = Double.parseDouble(input);
-                if(number%0.5!=0){
-                    System.out.println("Please input .5 or integer number");
-                    continue;
-                }
+                double min = 1;
+                double max = 1000000000;
                 if (number < min || number > max) {
                     System.out.print("Please input between " + min + ", " + max + ": ");
                     continue;
@@ -61,9 +64,9 @@ public class ValidateService implements IValidateService {
         }
     }
 
-    public String inputString(String mess, String regex) {
+    public String inputString(String mess /*thong bao hien thi cho user*/, String regex) { //nhan 1 chuoi hop le tu nguoi dung, dua vao regex
         if (regex == null || regex.isEmpty()) {
-            regex = "[A-Za-z0-9\\s]+";
+            regex = "[A-Za-z0-9\\s_-]+"; //mac dinh regex cho so, chu cai, va khoang trang (regex: bthuc chinh quy de kiem tra chuoi dau vao)
         }
 
         System.out.print(mess);
@@ -86,7 +89,7 @@ public class ValidateService implements IValidateService {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         dateFormat.setLenient(false);
 
-        while(true) {
+        while (true) {
             String input = sc.nextLine();
             try {
                 Date date = dateFormat.parse(input);
@@ -102,4 +105,17 @@ public class ValidateService implements IValidateService {
             }
         }
     }
+
+    public Boolean inputYesNo(String mess) { //nhan cau tra loi Y/N tu user
+        while (true) {
+            String input = inputString(mess+"(Y/N)",null);
+            if (input.equalsIgnoreCase("y")) { //true se y/Y
+                return true;
+            }
+            if (input.equalsIgnoreCase("n")) { //false se n/N
+                return false;
+            }
+        }
+    }
+
 }

@@ -1,61 +1,67 @@
 package Models;
-import com.google.gson.Gson;
 
-import java.io.FileWriter;
-import java.io.FileReader;
-import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 
 public class User {
-    public String userName;
+    public String id;
     public String password;
-    public List<Transaction> transactions = new ArrayList<>();
-    public Budget budget;
-    public List<FinancialGoal> goals = new ArrayList<>();
+    public String username;
+    public String createdAt;
+    public String updatedAt;
 
-    // Constructor, getters, and setters
-    public User(String userName, String password) {
-        this.userName = userName;
+    public User() {
+    }
+
+    public User(String username, String password) {
+        this.id = UUID.randomUUID().toString();
         this.password = password;
-        this.budget = new Budget();
+        this.username = username;
+        this.createdAt = LocalDateTime.now().toString();
+        this.updatedAt = LocalDateTime.now().toString();
     }
 
-    public String getUserName() {
-        return userName;
+    public String getId() {
+        return id;
     }
 
-    public boolean loginUser(String password) {
-        return this.password.equals(password);
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void addTransaction(Transaction transaction) {
-        transactions.add(transaction);
+    public String getPassword() {
+        return password;
     }
 
-    public List<Transaction> getTransactions() {
-        return transactions;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    // Save user data to JSON
-    public void saveUserData() {
-        try (FileWriter writer = new FileWriter(userName + ".json")) {
-            Gson gson = new Gson();
-            gson.toJson(this, writer);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
+    public String getCreatedAt() {
+        return createdAt;
     }
 
-    // Load user data from JSON
-    public static User loadUserData(String userName) {
-        try (FileReader reader = new FileReader(userName + ".json")) {
-           Gson gson = new Gson();
-           return gson.fromJson(reader, User.class);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
+
 

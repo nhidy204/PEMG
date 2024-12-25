@@ -1,27 +1,26 @@
 package Models;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class FinancialGoal {
-    public String id; //id financial
-    public String goalName;
-    public double goalTarget;
-    public String createdAt;
-    public String updatedAt;
-    public String userId;
+public class Wallet {
+    private String id;
+    private String createdAt;
+    private String updatedAt;
+    private double balance;
+    private String userId;
+    private String name;
 
-
-
-    public FinancialGoal() {
+    public Wallet(String string, String name, double balance, String s, String userId, String id) {
     }
 
-    public FinancialGoal(String id, String goalName, double goalTarget, String createdAt, String updatedAt, String userId) {
+    public Wallet(String id, String createdAt, String updatedAt, double balance, String userId, String name) {
         this.id = UUID.randomUUID().toString();
-        this.goalName = goalName;
-        this.goalTarget = goalTarget;
         this.createdAt = LocalDateTime.now().toString();
         this.updatedAt = LocalDateTime.now().toString();
+        this.balance = balance;
         this.userId = userId;
+        this.name = name;
     }
 
     public String getId() {
@@ -30,22 +29,6 @@ public class FinancialGoal {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getGoalName() {
-        return goalName;
-    }
-
-    public void setGoalName(String goalName) {
-        this.goalName = goalName;
-    }
-
-    public double getGoalTarget() {
-        return goalTarget;
-    }
-
-    public void setGoalTarget(double goalTarget) {
-        this.goalTarget = goalTarget;
     }
 
     public String getCreatedAt() {
@@ -64,11 +47,27 @@ public class FinancialGoal {
         this.updatedAt = updatedAt;
     }
 
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
     public String getUserId() {
         return userId;
     }
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

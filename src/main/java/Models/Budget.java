@@ -1,22 +1,73 @@
 package Models;
-
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class Budget {
-    public Map<String, Double> categoryBudgets = new HashMap<>();
-    public Map<String, Double> spending = new HashMap<>();
+    public String id;
+    public String budgetName;
+    public double maximumAmount;
+    public String createdAt;
+    public String updatedAt;
+    public String userId;
 
-    public void setBudget(String category, double amount) {
-        categoryBudgets.put(category, amount);
+    public Budget() {
     }
 
-    public void addSpending(String category, double amount) {
-        spending.put(category, spending.getOrDefault(category, 0.0) + amount);
+    public Budget(String id, String budgetName, double maximumAmount, String createdAt, String updatedAt, String userId) {
+        this.id = UUID.randomUUID().toString();
+        this.budgetName = budgetName;
+        this.maximumAmount = maximumAmount;
+        this.createdAt = LocalDateTime.now().toString();;
+        this.updatedAt = LocalDateTime.now().toString();;
+        this.userId = userId;
     }
 
-    public boolean isOverBudget(String category) {
-        return spending.getOrDefault(category, 0.0) > categoryBudgets.getOrDefault(category, Double.MAX_VALUE);
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getBudgetName() {
+        return budgetName;
+    }
+
+    public void setBudgetName(String budgetName) {
+        this.budgetName = budgetName;
+    }
+
+    public double getMaximumAmount() {
+        return maximumAmount;
+    }
+
+    public void setMaximumAmount(double maximumAmount) {
+        this.maximumAmount = maximumAmount;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
 
